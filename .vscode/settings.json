@@ -1,0 +1,19 @@
+{
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "eslint.enable": true,
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.suggest.autoImports": true,
+    "cSpell.words": ["APPVERSION", "Itab", "modalexamine", "newdigitalperson", "recommendhuman", "Sider"],
+    "editor.codeActionsOnSave": {
+        // auto fix on save
+        "source.fixAll": true,
+        // auto remove unused imports
+        "source.organizeImports": true,
+        // auto import
+        "source.addMissingImports": true,
+        // sort import
+        "source.sortImports": true
+        // "source.fixAll.eslint": false
+    }
+}
