@@ -63,4 +63,43 @@ func (a *App) ConnectDel(identity string) define.M {
 	return define.M{Code: define.SuccessCode, Msg: "删除成功"}
 }
 
-// func
+// 数据库列表
+func DbList(identity string) define.M {
+	if identity == "" {
+		return define.M{
+			Code: define.FailCode,
+			Msg:  "唯一标识不能为空",
+		}
+	}
+	list, _ := service.DbList(identity)
+	return define.M{
+		Code: define.SuccessCode,
+		Data: list,
+	}
+}
+
+// 数据库详情信息
+func DbInfo(identity string) define.M {
+	if identity == "" {
+		return define.M{
+			Code: define.FailCode,
+			Msg:  "唯一标识不能为空",
+		}
+	}
+	info, err := service.DbInfo(identity)
+	if err != nil {
+		if identity == "" {
+			return define.M{
+				Code: define.FailCode,
+				Msg:  err.Error(),
+			}
+		}
+	}
+
+	return define.M{
+		Code: define.SuccessCode,
+		Data: info,
+	}
+}
+
+// 数据库查询

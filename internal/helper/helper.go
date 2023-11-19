@@ -6,14 +6,17 @@ import (
 	"errors"
 	"net"
 	"os"
+	"path"
+	"runtime"
 
 	"github.com/go-redis/redis/v8"
 )
 
 func GetConfigPath() string {
-	dir, err := os.Getwd()
-	if err != nil {
-		panic("获取目录有误:" + err.Error())
+	_, file, _, ok := runtime.Caller(0)
+	dir := path.Dir(path.Dir(path.Dir(file)))
+	if !ok {
+		panic("获取项目目录有误:")
 	}
 	return dir + string(os.PathSeparator) + define.ConfigName
 }
@@ -42,7 +45,11 @@ func GetConnection(identity string) (*define.Connection, error) {
 }
 
 // 获取redis客户端
-func GetRedisClient(conn *define.Connection, db int) (*redis.Client, error) {
+func GetRedisClient(identity string, db int) (*redis.Client, error) {
+	conn, err := GetConnection(identity)
+	if err != nil {
+		return nil, err
+	}
 	options := redis.Options{
 		Addr:         net.JoinHostPort(conn.Addr, conn.Port),
 		Username:     conn.UserName,

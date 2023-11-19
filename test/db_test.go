@@ -2,11 +2,10 @@ package test
 
 import (
 	"changeme/internal/define"
+	"changeme/internal/service"
 	"context"
 	"fmt"
 	"github.com/go-redis/redis/v8"
-	"strconv"
-	"strings"
 	"testing"
 )
 
@@ -15,58 +14,74 @@ var rdb = redis.NewClient(&redis.Options{
 })
 var ctx = context.Background()
 
-func TestInfo(t *testing.T) {
-	var nums int
-	res := map[string]int{}
-	options := redis.Options{
-		Addr:         "localhost:6379",
-		Username:     "",
-		Password:     "",
-		DB:           0,
-		ReadTimeout:  -1,
-		WriteTimeout: -1,
+const CIDENTITY = "ccffe1d6-1db1-4415-92fc-20055fccb46d"
+
+// 测试数据库列表
+func TestDbList(t *testing.T) {
+	list, _ := service.DbList("ccffe1d6-1db1-4415-92fc-20055fccb46d")
+	for _, item := range list {
+		fmt.Printf("%v\n", *item)
 	}
-	rdb := redis.NewClient(&options)
-	keySpace, err := rdb.Info(context.Background(), "keyspace").Result()
+}
+
+// 测试数据库详情信息
+func TestDbInfo(t *testing.T) {
+	identity := "ccffe1d6-1db1-4415-92fc-20055fccb46d"
+	dbInfo, err := service.DbInfo(identity)
 	if err != nil {
-		fmt.Printf("数据执行有误" + err.Error())
+		fmt.Printf("%v", err)
 	}
-	dbList := strings.Split(keySpace, "\r\n")
-	for i, v := range dbList {
-		if i == 0 || v == "" {
-			continue
-		}
-		key := strings.Split(v, ":")
-		if len(key) < 2 {
-			continue
-		}
-		keyValue := strings.Split(key[1], ",")
-		for _, vv := range keyValue {
-			arr := strings.Split(vv, "=")
-			if len(arr) < 2 {
-				continue
-			}
-			nums, _ = strconv.Atoi(arr[1])
-			if arr[0] == "keys" {
-				res[key[0]] = nums
-			}
-		}
-	}
-	// config get 获取数据库个数
-	result, _ := rdb.ConfigGet(context.Background(), "databases").Result()
+	fmt.Printf("dbInfo:\n%v", dbInfo)
+}
 
-	n, _ := strconv.Atoi(result[1].(string))
-	dbs := make([]*define.DbItem, n)
-	for i, _ := range dbs {
-		item := &define.DbItem{
-			Key:    fmt.Sprintf("key%d", i),
-			Number: 0,
-		}
-
-		if n, ok := res[fmt.Sprintf("key%d", i)]; ok {
-			item.Number = n
-		}
-		dbs[i] = item
+// 测试数据库查询
+func TestKeyListRequest(t *testing.T) {
+	req := define.SearchKey{
+		ConnIdentity: "ccffe1d6-1db1-4415-92fc-20055fccb46d",
+		Db:           0,
+		Keyword:      "user123",
+		KeyType:      "string",
 	}
-	fmt.Printf("dbs:%#v\n", dbs)
+	value, err := service.SearchValues(&req)
+	if err != nil {
+		fmt.Printf("err:" + err.Error())
+	}
+	for _, item := range value {
+		fmt.Printf("value:%#v\n", item)
+	}
+}
+
+// 测试添加字符串
+func TestAddString(t *testing.T) {
+	err := service.AddString(&define.AddUpdateString{
+		ConnIdentity: CIDENTITY,
+		Key:          "hello11",
+		Value:        "word",
+		TTL:          0,
+	})
+	if err != nil {
+		fmt.Print("err:" + err.Error())
+	}
+	fmt.Printf("添加成功")
+}
+
+// 测试删除字符串
+func TestDelString(t *testing.T) {
+	err := service.DelString(&define.DelString{
+		ConnIdentity: CIDENTITY,
+		Key:          "hello",
+	})
+	if err != nil {
+		fmt.Print("err:" + err.Error())
+	}
+	fmt.Printf("删除成功")
+}
+
+// 测试更新字符串
+func TestUpdateString(t *testing.T) {
+	err := service.UpdateString(&define.AddUpdateString{ConnIdentity: CIDENTITY, Key: "key", Value: "123"})
+	if err != nil {
+		fmt.Print("err:" + err.Error())
+	}
+	fmt.Printf("删除成功")
 }
