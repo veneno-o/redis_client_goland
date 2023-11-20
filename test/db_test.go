@@ -57,10 +57,10 @@ func TestAddString(t *testing.T) {
 		ConnIdentity: CIDENTITY,
 		Key:          "hello11",
 		Value:        "word",
-		TTL:          0,
 	})
 	if err != nil {
 		fmt.Print("err:" + err.Error())
+		return
 	}
 	fmt.Printf("添加成功")
 }
@@ -69,19 +69,81 @@ func TestAddString(t *testing.T) {
 func TestDelString(t *testing.T) {
 	err := service.DelString(&define.DelString{
 		ConnIdentity: CIDENTITY,
-		Key:          "hello",
+		Key:          "hello11",
 	})
 	if err != nil {
 		fmt.Print("err:" + err.Error())
+		return
 	}
 	fmt.Printf("删除成功")
 }
 
 // 测试更新字符串
 func TestUpdateString(t *testing.T) {
-	err := service.UpdateString(&define.AddUpdateString{ConnIdentity: CIDENTITY, Key: "key", Value: "123"})
+	err := service.UpdateString(&define.AddUpdateString{ConnIdentity: CIDENTITY, Key: "key", Value: ""})
 	if err != nil {
 		fmt.Print("err:" + err.Error())
+		return
+	}
+	fmt.Printf("更新成功")
+}
+
+// 测试添加哈希
+func TestAddHash(t *testing.T) {
+	err := service.AddHash(&define.AddHash{
+		ConnIdentity: CIDENTITY,
+		Key:          "c",
+		Value: map[string]string{
+			"eat":    "fish",
+			"weight": "40",
+			"a":      "b",
+			"c":      "d",
+		},
+	})
+	if err != nil {
+		fmt.Print("err:" + err.Error())
+		return
+	}
+	fmt.Printf("添加成功")
+}
+
+// 测试删除某个hash filed
+func TestDelHash(t *testing.T) {
+	err := service.DelHash(&define.DelHash{
+		ConnIdentity: CIDENTITY,
+		Key:          "cat1",
+	})
+	if err != nil {
+		fmt.Print("err:" + err.Error())
+		return
 	}
 	fmt.Printf("删除成功")
+}
+
+// 测试删除某个hash filed
+func TestDelHashItem(t *testing.T) {
+	err := service.DelHashItem(&define.DelHashItem{
+		ConnIdentity: CIDENTITY,
+		Key:          "c",
+		Field:        []string{"eat", "c"},
+	})
+	if err != nil {
+		fmt.Print("err:" + err.Error())
+		return
+	}
+	fmt.Printf("field删除成功")
+}
+
+// 更新hash filed
+func TestUpdateHashItem(t *testing.T) {
+	err := service.UpdateHashItem(&define.UpdateHashItem{
+		ConnIdentity: CIDENTITY,
+		Key:          "c",
+		Field:        map[string]string{"a": "d"},
+	})
+	if err != nil {
+		fmt.Print("err:" + err.Error())
+		return
+	}
+	fmt.Printf("field更新成功\n")
 }

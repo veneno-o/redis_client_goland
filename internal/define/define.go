@@ -67,8 +67,28 @@ type DelString struct {
 
 // 添加哈希类型
 type AddHash struct {
-	ConnIdentity string         `json:"conn_identity"`
-	Key          string         `json:"key"`
-	Value        map[string]any `json:"value"`
-	TTL          time.Duration  `json:"ttl"`
+	ConnIdentity string            `json:"conn_identity"`
+	Key          string            `json:"key"`
+	Value        map[string]string `json:"value"`
+	TTL          time.Duration     `json:"ttl"`
+}
+
+// 删除哈希类型
+type DelHash struct {
+	ConnIdentity string `json:"conn_identity"`
+	Key          string `json:"key"`
+}
+
+// 删除哈希字段类型
+type DelHashItem struct {
+	ConnIdentity string   `json:"conn_identity"`
+	Key          string   `json:"key"`
+	Field        []string `json:"field"`
+}
+
+// 更新哈希字段类型
+type UpdateHashItem struct {
+	ConnIdentity string            `json:"conn_identity"`
+	Key          string            `json:"key"`
+	Field        map[string]string `json:"field"`
 }
