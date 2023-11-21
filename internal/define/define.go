@@ -92,3 +92,9 @@ type UpdateHashItem struct {
 	Key          string            `json:"key"`
 	Field        map[string]string `json:"field"`
 }
+
+// cli操作
+type Cli struct {
+	ConnIdentity string `json:"conn_identity"`
+	Cli          []any
+}

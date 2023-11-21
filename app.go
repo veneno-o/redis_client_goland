@@ -102,4 +102,7 @@ func DbInfo(identity string) define.M {
 	}
 }
 
-// 数据库查询
+// 数据查询
+func (a *App) SearchValues(search *define.SearchKey) ([]*define.ReplyValue, error) {
+	return service.SearchValues(search)
+}

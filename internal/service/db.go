@@ -94,6 +94,7 @@ func DbInfo(identity string) (map[string]string, error) {
 func SearchValues(req *define.SearchKey) ([]*define.ReplyValue, error) {
 	replyList := make([]*define.ReplyValue, 0)
 	rdb, err := helper.GetRedisClient(req.ConnIdentity, 0)
+	defer rdb.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -144,4 +145,24 @@ func SearchValues(req *define.SearchKey) ([]*define.ReplyValue, error) {
 		replyList = append(replyList, reply)
 	}
 	return replyList, nil
+}
+
+// cli命令
+func ExeCli(cli *define.Cli) (any, error) {
+	if cli.ConnIdentity == "" {
+		return nil, errors.New("唯一标识不能为空")
+	}
+	if len(cli.Cli) == 0 {
+		return nil, errors.New("参数不能为空")
+	}
+	rdb, err := helper.GetRedisClient(cli.ConnIdentity, 0)
+	defer rdb.Close()
+	if err != nil {
+		return nil, err
+	}
+	result, err := rdb.Do(context.Background(), cli.Cli...).Result()
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }

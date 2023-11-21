@@ -134,7 +134,7 @@ func TestDelHashItem(t *testing.T) {
 	fmt.Printf("field删除成功")
 }
 
-// 更新hash filed
+// 测试更新hash filed
 func TestUpdateHashItem(t *testing.T) {
 	err := service.UpdateHashItem(&define.UpdateHashItem{
 		ConnIdentity: CIDENTITY,
@@ -146,4 +146,17 @@ func TestUpdateHashItem(t *testing.T) {
 		return
 	}
 	fmt.Printf("field更新成功\n")
+}
+
+// 测试cli
+func TestExeCli(t *testing.T) {
+	cli, err := service.ExeCli(&define.Cli{
+		ConnIdentity: CIDENTITY,
+		Cli:          []any{"get", "c"},
+	})
+	if err != nil {
+		fmt.Println("err:\n" + err.Error())
+		return
+	}
+	fmt.Printf("cli:%#v\n", cli)
 }
