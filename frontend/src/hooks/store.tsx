@@ -1,13 +1,8 @@
 import { createContext, useContext, useReducer } from "react";
+import reducer from "./reduer";
 const initState = {};
 
 const context = createContext(initState);
-
-function reducer(state: any, payload: any) {
-  return {
-    ...state,
-  };
-}
 
 export function StoreProvider(props: any) {
   const { children } = props;

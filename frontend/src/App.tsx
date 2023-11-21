@@ -19,6 +19,8 @@ import {
 } from "../wailsjs/go/main/App";
 // import { define } from "../wailsjs/go/models";
 import "./App.css";
+import { StoreProvider } from "./hooks/store";
+import Router from "./router";
 interface connType {
   identity: string;
   name: string;
@@ -283,4 +285,12 @@ function App() {
   );
 }
 
-export default App;
+function T() {
+  return (
+    <StoreProvider>
+      <Router></Router>
+    </StoreProvider>
+  );
+}
+
+export default T;
