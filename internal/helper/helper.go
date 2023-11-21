@@ -62,3 +62,8 @@ func GetRedisClient(identity string, db int) (*redis.Client, error) {
 
 	return client, nil
 }
+
+// 封装返回格式
+func GetResult(code int, msg string, value any) define.M {
+	return define.M{code, msg, value}
+}

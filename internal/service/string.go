@@ -9,16 +9,7 @@ import (
 )
 
 func AddString(prop *define.AddUpdateString) error {
-	// 非空判断
-	if prop.ConnIdentity == "" {
-		return errors.New("唯一标识不能为空")
-	}
-	if prop.Key == "" {
-		return errors.New("key不能为空")
-	}
-	if prop.TTL < 0 {
-		return errors.New("无效过期时间")
-	}
+
 	rdb, err := helper.GetRedisClient(prop.ConnIdentity, 0)
 	if err != nil {
 		return err

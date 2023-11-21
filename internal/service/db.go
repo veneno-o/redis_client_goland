@@ -92,6 +92,9 @@ func DbInfo(identity string) (map[string]string, error) {
 
 // 模糊查询数据库数据
 func SearchValues(req *define.SearchKey) ([]*define.ReplyValue, error) {
+	if req.ConnIdentity == "" {
+		return nil, errors.New("唯一标识不能为空")
+	}
 	replyList := make([]*define.ReplyValue, 0)
 	rdb, err := helper.GetRedisClient(req.ConnIdentity, 0)
 	defer rdb.Close()
