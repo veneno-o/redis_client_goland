@@ -15,3 +15,10 @@
   background: #202020;
   padding: 20px;
 }
+.connDb {
+  cursor: pointer;
+}
+.connDb:hover {
+  text-decoration: underline;
+  color: #abcedf;
+}

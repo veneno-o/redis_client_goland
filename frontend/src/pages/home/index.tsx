@@ -1,32 +1,53 @@
-import { Button, Checkbox, Form, Input, Layout, Table } from "antd";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Layout,
+  Table,
+  Tag,
+  notification,
+} from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import { ColumnsType } from "antd/es/table";
-import { useState } from "react";
-import { DataType, FieldType } from "../../types";
+import { useEffect, useState } from "react";
+import { ConnectDel, ConnectionList } from "../../../wailsjs/go/main/App";
+import { ConnAreaState, ConnList, FieldType } from "../../types";
 import Style from "./index.module.css";
 
 export default function Home() {
   // 0 展示连接列表 1 新建连接 2 编辑连接
-  const [area, setArea] = useState(0);
+  const [area, setArea] = useState<ConnAreaState>(0);
+  const [connList, setConnList] = useState<ConnList[]>([]);
   const [form] = Form.useForm();
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<ConnList> = [
     {
-      title: "Database Name",
-      dataIndex: "databaseName",
-      key: "databaseName",
+      title: "Database Alias",
+      dataIndex: "name",
+      key: "name",
+      width: 200,
+      render: (_, item) => (
+        <span className={Style.connDb}>{item.addr + ":" + item.port}</span>
+      ),
+    },
+    {
+      title: "Host",
+      dataIndex: "addr",
+      key: "addr",
       width: 200,
     },
     {
-      title: "Host:Port",
-      dataIndex: "hostPort",
-      key: "hostPort",
+      title: "Port",
+      dataIndex: "port",
+      key: "port",
       width: 200,
     },
     {
       title: "Identity",
       dataIndex: "identity",
       key: "identity",
+      render: (_, item) => <Tag color="rgb(22 104 220)">{item.identity}</Tag>,
     },
     {
       title: "",
@@ -34,21 +55,26 @@ export default function Home() {
       key: "address",
       width: 200,
       render: (_, item) => (
-        <>
-          <Button type="primary">编辑</Button>
-          <Button type="primary" className="ml-[8px]">
+        <div style={{ whiteSpace: "nowrap" }}>
+          <Button
+            type="primary"
+            onClick={() => {
+              handEditConnItem(item);
+            }}
+          >
+            编辑
+          </Button>
+          <Button
+            onClick={() => {
+              handDelConnItem(item);
+            }}
+            type="primary"
+            className="ml-[8px]"
+          >
             删除
           </Button>
-        </>
+        </div>
       ),
-    },
-  ];
-  const data: DataType[] = [
-    {
-      databaseName: "1",
-      hostPort: "John Brown",
-      identity: "dfs",
-      address: "New York No. 1 Lake Park",
     },
   ];
   const onFinish = (values: any) => {
@@ -60,7 +86,7 @@ export default function Home() {
   };
   const MainArea =
     area == 0 ? (
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={connList} pagination={false} />
     ) : (
       <Form
         name="basic"
@@ -103,6 +129,31 @@ export default function Home() {
         </Form.Item>
       </Form>
     );
+  // init
+  useEffect(() => {
+    HandGetConnList();
+  }, []);
+  function HandGetConnList() {
+    ConnectionList().then((res) => {
+      if (res.code == 200) {
+        setConnList(res.data);
+      }
+    });
+  }
+  function handDelConnItem(item: ConnList) {
+    ConnectDel(item.identity).then((res) => {
+      if (res.code == 200) {
+        notification.success({
+          type: "success",
+          message: res.msg,
+        });
+      }
+      HandGetConnList();
+    });
+  }
+  function handEditConnItem(item: ConnList) {
+    setArea(2);
+  }
   return (
     <Layout
       hasSider
