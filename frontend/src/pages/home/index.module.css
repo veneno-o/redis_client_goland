@@ -1,0 +1,17 @@
+.main {
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+}
+.logo {
+  width: 40px;
+  height: 40px;
+  background: url("../../assets/images/appicon.png") center/contain no-repeat;
+  background-size: 40px;
+  margin: 10px auto;
+}
+.table {
+  flex: 1;
+  background: #202020;
+  padding: 20px;
+}
