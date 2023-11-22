@@ -17,8 +17,9 @@
 }
 .connDb {
   cursor: pointer;
+  color: #fff;
 }
 .connDb:hover {
   text-decoration: underline;
-  color: #abcedf;
+  color: rgb(22, 104, 220);
 }

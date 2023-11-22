@@ -4,6 +4,7 @@ import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ConnectCreate,
   ConnectDel,
@@ -21,6 +22,7 @@ const initForm = {
   identity: "",
 };
 export default function Home() {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   // 0 展示连接列表 1 新建连接 2 编辑连接
   const [area, setArea] = useState<ConnAreaState>(0);
@@ -31,7 +33,11 @@ export default function Home() {
       dataIndex: "name",
       key: "name",
       width: 200,
-      render: (_, item) => <span className={Style.connDb}>{item.name}</span>,
+      render: (_, item) => (
+        <Link to={"/" + item.identity} className={Style.connDb}>
+          {item.name}
+        </Link>
+      ),
     },
     {
       title: "Host",
