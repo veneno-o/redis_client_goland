@@ -1,35 +1,37 @@
-import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  Layout,
-  Table,
-  Tag,
-  notification,
-} from "antd";
+import { CheckOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Layout, Table, Tag, notification } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { ConnectDel, ConnectionList } from "../../../wailsjs/go/main/App";
+import {
+  ConnectCreate,
+  ConnectDel,
+  ConnectionEdit,
+  ConnectionList,
+} from "../../../wailsjs/go/main/App";
 import { ConnAreaState, ConnList, FieldType } from "../../types";
 import Style from "./index.module.css";
-
+const initForm = {
+  name: "127.0.0.1",
+  addr: "127.0.0.1",
+  port: "6173",
+  userName: "",
+  password: "",
+  identity: "",
+};
 export default function Home() {
+  const [form] = Form.useForm();
   // 0 展示连接列表 1 新建连接 2 编辑连接
   const [area, setArea] = useState<ConnAreaState>(0);
   const [connList, setConnList] = useState<ConnList[]>([]);
-  const [form] = Form.useForm();
   const columns: ColumnsType<ConnList> = [
     {
       title: "Database Alias",
       dataIndex: "name",
       key: "name",
       width: 200,
-      render: (_, item) => (
-        <span className={Style.connDb}>{item.addr + ":" + item.port}</span>
-      ),
+      render: (_, item) => <span className={Style.connDb}>{item.name}</span>,
     },
     {
       title: "Host",
@@ -77,62 +79,61 @@ export default function Home() {
       ),
     },
   ];
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-  };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
   const MainArea =
     area == 0 ? (
       <Table columns={columns} dataSource={connList} pagination={false} />
     ) : (
-      <Form
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
-      >
-        <Form.Item<FieldType>
-          label="Username"
-          name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
+      <>
+        <div className="text-[28px] pl-[230px] mb-[20px]">
+          {area == 1 ? (
+            <span>Add Connection</span>
+          ) : (
+            <span>Edit Connection</span>
+          )}
+        </div>
+        <Form
+          form={form}
+          name="basic"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          style={{ maxWidth: 600 }}
+          initialValues={initForm}
+          onFinish={onFinish}
+          autoComplete="off"
         >
-          <Input />
-        </Form.Item>
+          <Form.Item<FieldType> label="Database Alias" name="name">
+            <Input placeholder="127.0.0.1" />
+          </Form.Item>
 
-        <Form.Item<FieldType>
-          label="Password"
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input.Password />
-        </Form.Item>
+          <Form.Item<FieldType> label="Addr" name="addr">
+            <Input placeholder="127.0.0.1" />
+          </Form.Item>
+          <Form.Item<FieldType> label="Port" name="port">
+            <Input placeholder="6173" />
+          </Form.Item>
+          <Form.Item<FieldType> label="UserName" name="userName">
+            <Input />
+          </Form.Item>
+          <Form.Item<FieldType> label="Password" name="password">
+            <Input.Password />
+          </Form.Item>
+          <Form.Item<FieldType> hidden label="identity" name="identity">
+            <Input.Password hidden />
+          </Form.Item>
 
-        <Form.Item<FieldType>
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{ offset: 8, span: 16 }}
-        >
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button type="primary" htmlType="submit">
+              Confirm
+            </Button>
+          </Form.Item>
+        </Form>
+      </>
     );
   // init
   useEffect(() => {
     HandGetConnList();
-  }, []);
+  }, [area]);
   function HandGetConnList() {
     ConnectionList().then((res) => {
       if (res.code == 200) {
@@ -146,6 +147,7 @@ export default function Home() {
         notification.success({
           type: "success",
           message: res.msg,
+          icon: <CheckOutlined />,
         });
       }
       HandGetConnList();
@@ -153,7 +155,40 @@ export default function Home() {
   }
   function handEditConnItem(item: ConnList) {
     setArea(2);
+    form.setFieldsValue(item);
   }
+  function onFinish(values: any) {
+    if (area == 1) {
+      // 新增连接
+      ConnectCreate(values).then((res) => {
+        if (res.code == 200) {
+          notification.success({
+            message: res.msg,
+          });
+        } else {
+          notification.error({
+            message: res.msg,
+          });
+        }
+        setArea(0);
+      });
+    } else if (area == 2) {
+      // 编辑连接
+      ConnectionEdit(values).then((res) => {
+        if (res.code == 200) {
+          notification.success({
+            message: res.msg,
+          });
+        } else {
+          notification.error({
+            message: res.msg,
+          });
+        }
+        setArea(0);
+      });
+    }
+  }
+
   return (
     <Layout
       hasSider

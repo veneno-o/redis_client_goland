@@ -5,9 +5,12 @@
 //   address: string;
 // }
 export type FieldType = {
-  username?: string;
-  password?: string;
-  remember?: string;
+  name: string;
+  addr: string;
+  port: string;
+  userName: string;
+  password: string;
+  identity: string;
 };
 // 0 展示连接列表 1 新建连接 2 编辑连接
 export type ConnAreaState = 0 | 1 | 2;

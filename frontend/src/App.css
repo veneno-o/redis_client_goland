@@ -3,3 +3,10 @@
   padding: 0;
   color: #fff;
 }
+.ant-notification-notice {
+  background: #202020 !important;
+  border-radius: 4px;
+}
+.ant-notification-notice-message {
+  color: #fff !important;
+}
