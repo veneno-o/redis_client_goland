@@ -23,6 +23,21 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
+// 建立连接
+func (a *App) ConnectDb(identity string) define.M {
+	err := service.DbConn(identity)
+	if err != nil {
+		return define.M{
+			Code: define.FailCode,
+			Msg:  err.Error(),
+		}
+	}
+	return define.M{
+		Code: define.SuccessCode,
+		Msg:  "连接成功",
+	}
+}
+
 // 添加连接
 func (a *App) ConnectCreate(conf define.Connection) define.M {
 	// conf := define.Connection{

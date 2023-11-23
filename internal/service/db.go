@@ -12,6 +12,15 @@ import (
 
 var ctx context.Context
 
+// 建立连接
+func DbConn(identity string) error {
+	_, err := helper.GetConnection(identity)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // 获取数据库列表
 func DbList(identity string) ([]*define.DbItem, error) {
 	var nums int

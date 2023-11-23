@@ -2,6 +2,7 @@ package test
 
 import (
 	"changeme/internal/define"
+	"changeme/internal/helper"
 	"changeme/internal/service"
 	"context"
 	"fmt"
@@ -160,4 +161,12 @@ func TestExeCli(t *testing.T) {
 		return
 	}
 	fmt.Printf("cli:%#v\n", cli)
+}
+
+// 测试客户端连接
+func TestConn(t *testing.T) {
+	_, err := helper.GetConnection("")
+	if err != nil {
+
+	}
 }
