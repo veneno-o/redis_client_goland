@@ -14,6 +14,10 @@ export function ConnectCreate(arg1) {
   return window['go']['main']['App']['ConnectCreate'](arg1);
 }
 
+export function ConnectDb(arg1) {
+  return window['go']['main']['App']['ConnectDb'](arg1);
+}
+
 export function ConnectDel(arg1) {
   return window['go']['main']['App']['ConnectDel'](arg1);
 }

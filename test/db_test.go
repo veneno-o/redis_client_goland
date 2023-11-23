@@ -167,6 +167,6 @@ func TestExeCli(t *testing.T) {
 func TestConn(t *testing.T) {
 	_, err := helper.GetConnection("")
 	if err != nil {
-
+		fmt.Print(err.Error())
 	}
 }

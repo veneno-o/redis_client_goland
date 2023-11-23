@@ -8,6 +8,8 @@ export function AddString(arg1:define.AddUpdateString):Promise<define.M>;
 
 export function ConnectCreate(arg1:define.Connection):Promise<define.M>;
 
+export function ConnectDb(arg1:string):Promise<define.M>;
+
 export function ConnectDel(arg1:string):Promise<define.M>;
 
 export function ConnectionEdit(arg1:define.Connection):Promise<define.M>;

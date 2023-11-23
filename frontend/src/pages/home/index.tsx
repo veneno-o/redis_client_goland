@@ -4,9 +4,10 @@ import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   ConnectCreate,
+  ConnectDb,
   ConnectDel,
   ConnectionEdit,
   ConnectionList,
@@ -34,9 +35,14 @@ export default function Home() {
       key: "name",
       width: 200,
       render: (_, item) => (
-        <Link to={"/" + item.identity} className={Style.connDb}>
+        <div
+          onClick={() => {
+            handGetConn(item.identity);
+          }}
+          className={Style.connDb}
+        >
           {item.name}
-        </Link>
+        </div>
       ),
     },
     {
@@ -86,6 +92,79 @@ export default function Home() {
     },
   ];
 
+  // init
+  useEffect(() => {
+    handGetConnList();
+  }, [area]);
+  // 建立连接
+  async function handGetConn(identity: string) {
+    const res = await ConnectDb(identity).then((res) => {
+      if (res.code == 200) {
+        navigate("/" + identity);
+        notification.success({
+          message: res.msg,
+        });
+      } else {
+        notification.error({
+          message: res.msg,
+        });
+      }
+    });
+  }
+  function handGetConnList() {
+    ConnectionList().then((res) => {
+      if (res.code == 200) {
+        setConnList(res.data);
+      }
+    });
+  }
+  function handDelConnItem(item: ConnList) {
+    ConnectDel(item.identity).then((res) => {
+      if (res.code == 200) {
+        notification.success({
+          type: "success",
+          message: res.msg,
+          icon: <CheckOutlined />,
+        });
+      }
+      handGetConnList();
+    });
+  }
+  function handEditConnItem(item: ConnList) {
+    setArea(2);
+    form.setFieldsValue(item);
+  }
+  function onFinish(values: any) {
+    if (area == 1) {
+      // 新增连接
+      ConnectCreate(values).then((res) => {
+        if (res.code == 200) {
+          notification.success({
+            message: res.msg,
+          });
+        } else {
+          notification.error({
+            message: res.msg,
+          });
+        }
+        setArea(0);
+      });
+    } else if (area == 2) {
+      // 编辑连接
+      ConnectionEdit(values).then((res) => {
+        if (res.code == 200) {
+          notification.success({
+            message: res.msg,
+          });
+        } else {
+          notification.error({
+            message: res.msg,
+          });
+        }
+        setArea(0);
+      });
+    }
+  }
   const MainArea =
     area == 0 ? (
       <Table columns={columns} dataSource={connList} pagination={false} />
@@ -136,64 +215,6 @@ export default function Home() {
         </Form>
       </>
     );
-  // init
-  useEffect(() => {
-    HandGetConnList();
-  }, [area]);
-  function HandGetConnList() {
-    ConnectionList().then((res) => {
-      if (res.code == 200) {
-        setConnList(res.data);
-      }
-    });
-  }
-  function handDelConnItem(item: ConnList) {
-    ConnectDel(item.identity).then((res) => {
-      if (res.code == 200) {
-        notification.success({
-          type: "success",
-          message: res.msg,
-          icon: <CheckOutlined />,
-        });
-      }
-      HandGetConnList();
-    });
-  }
-  function handEditConnItem(item: ConnList) {
-    setArea(2);
-    form.setFieldsValue(item);
-  }
-  function onFinish(values: any) {
-    if (area == 1) {
-      // 新增连接
-      ConnectCreate(values).then((res) => {
-        if (res.code == 200) {
-          notification.success({
-            message: res.msg,
-          });
-        } else {
-          notification.error({
-            message: res.msg,
-          });
-        }
-        setArea(0);
-      });
-    } else if (area == 2) {
-      // 编辑连接
-      ConnectionEdit(values).then((res) => {
-        if (res.code == 200) {
-          notification.success({
-            message: res.msg,
-          });
-        } else {
-          notification.error({
-            message: res.msg,
-          });
-        }
-        setArea(0);
-      });
-    }
-  }
 
   return (
     <Layout
