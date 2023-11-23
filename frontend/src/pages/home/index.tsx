@@ -98,7 +98,7 @@ export default function Home() {
   }, [area]);
   // 建立连接
   async function handGetConn(identity: string) {
-    const res = await ConnectDb(identity).then((res) => {
+    ConnectDb(identity).then((res) => {
       if (res.code == 200) {
         navigate("/" + identity);
         notification.success({

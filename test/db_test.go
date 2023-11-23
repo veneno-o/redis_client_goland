@@ -2,7 +2,6 @@ package test
 
 import (
 	"changeme/internal/define"
-	"changeme/internal/helper"
 	"changeme/internal/service"
 	"context"
 	"fmt"
@@ -165,8 +164,9 @@ func TestExeCli(t *testing.T) {
 
 // 测试客户端连接
 func TestConn(t *testing.T) {
-	_, err := helper.GetConnection("")
+	err := service.DbConn("d3fc0813-b795-4bef-bb36-1fb32509b97f")
 	if err != nil {
 		fmt.Print(err.Error())
 	}
+	fmt.Printf("连接成功")
 }

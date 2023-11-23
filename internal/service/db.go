@@ -14,7 +14,11 @@ var ctx context.Context
 
 // 建立连接
 func DbConn(identity string) error {
-	_, err := helper.GetConnection(identity)
+	rdb, err := helper.GetRedisClient(identity, 0)
+	if err != nil {
+		return err
+	}
+	_, err = rdb.Do(context.Background(), "ping").Result()
 	if err != nil {
 		return err
 	}
