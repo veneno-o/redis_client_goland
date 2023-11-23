@@ -96,5 +96,5 @@ type UpdateHashItem struct {
 // cli操作
 type Cli struct {
 	ConnIdentity string `json:"conn_identity"`
-	Cli          []any
+	Cli          []any`json:"cli"`
 }

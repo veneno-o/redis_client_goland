@@ -152,8 +152,8 @@ func TestUpdateHashItem(t *testing.T) {
 // 测试cli
 func TestExeCli(t *testing.T) {
 	cli, err := service.ExeCli(&define.Cli{
-		ConnIdentity: CIDENTITY,
-		Cli:          []any{"get", "c"},
+		ConnIdentity: "d3fc0813-b795-4bef-bb36-1fb32509b97f",
+		Cli:          []any{"keys", "*"},
 	})
 	if err != nil {
 		fmt.Println("err:\n" + err.Error())

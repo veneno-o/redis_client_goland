@@ -38,6 +38,7 @@ export namespace define {
 	}
 	export class Cli {
 	    conn_identity: string;
+	    cli: any[];
 	
 	    static createFrom(source: any = {}) {
 	        return new Cli(source);
@@ -46,6 +47,7 @@ export namespace define {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.conn_identity = source["conn_identity"];
+	        this.cli = source["cli"];
 	    }
 	}
 	export class Connection {

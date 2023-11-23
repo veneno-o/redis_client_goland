@@ -31,3 +31,13 @@ export interface SearchKey {
   keyword: string;
   keyType: string;
 }
+
+export interface ICli {
+  conn_identity: string;
+  cli: any[];
+}
+// cli消息
+export interface CliMsg {
+  type: "success" | "error";
+  text: string;
+}
