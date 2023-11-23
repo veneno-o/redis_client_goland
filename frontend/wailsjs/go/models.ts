@@ -36,6 +36,18 @@ export namespace define {
 	        this.ttl = source["ttl"];
 	    }
 	}
+	export class Cli {
+	    conn_identity: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Cli(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.conn_identity = source["conn_identity"];
+	    }
+	}
 	export class Connection {
 	    identity: string;
 	    name: string;

@@ -5,8 +5,9 @@ import (
 	"changeme/internal/service"
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"testing"
+
+	"github.com/go-redis/redis/v8"
 )
 
 var rdb = redis.NewClient(&redis.Options{
@@ -37,10 +38,10 @@ func TestDbInfo(t *testing.T) {
 // 测试数据库查询
 func TestKeyListRequest(t *testing.T) {
 	req := define.SearchKey{
-		ConnIdentity: "ccffe1d6-1db1-4415-92fc-20055fccb46d",
+		ConnIdentity: "b304e3a6-6430-401a-a0a8-6f120136c221",
 		Db:           0,
-		Keyword:      "user123",
-		KeyType:      "string",
+		Keyword:      "",
+		KeyType:      "",
 	}
 	value, err := service.SearchValues(&req)
 	if err != nil {

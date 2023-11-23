@@ -118,7 +118,7 @@ func (a *App) SearchValues(search *define.SearchKey) define.M {
 }
 
 // cli查询
-func (a *App) searchCli(cli *define.Cli) define.M {
+func (a *App) SearchCli(cli *define.Cli) define.M {
 	exeCli, err := service.ExeCli(cli)
 	if err != nil {
 		return define.M{

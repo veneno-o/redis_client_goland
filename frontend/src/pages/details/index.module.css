@@ -1,0 +1,50 @@
+.body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+.logo {
+  width: 40px;
+  height: 40px;
+  background: url("../../assets/images/appicon.png") center/contain no-repeat;
+  background-size: 40px;
+  margin: 10px auto;
+}
+.main {
+  padding: 0 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.tableBox {
+  flex: 1;
+  height: calc(50%);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.table {
+  margin-top: 50px;
+  background-color: #303030;
+}
+.cliBox {
+  border: 1px solid #1d1d1d;
+  border-bottom: none;
+  background-color: #000;
+  height: calc(50% - 24px);
+  display: none;
+}
+.cliBox.active {
+  display: block;
+}
+.botBar {
+  height: 24px;
+  border: 1px solid #1d1d1d;
+  display: flex;
+  justify-content: space-between;
+}
+.cliText {
+  font-size: 12px;
+  margin-right: 10px;
+  line-height: 24px;
+}

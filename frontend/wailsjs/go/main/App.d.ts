@@ -24,6 +24,8 @@ export function DelHashItem(arg1:define.DelHashItem):Promise<define.M>;
 
 export function DelString(arg1:define.DelString):Promise<define.M>;
 
+export function SearchCli(arg1:define.Cli):Promise<define.M>;
+
 export function SearchValues(arg1:define.SearchKey):Promise<define.M>;
 
 export function UpdateHashItem(arg1:define.UpdateHashItem):Promise<define.M>;

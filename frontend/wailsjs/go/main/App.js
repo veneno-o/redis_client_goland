@@ -46,6 +46,10 @@ export function DelString(arg1) {
   return window['go']['main']['App']['DelString'](arg1);
 }
 
+export function SearchCli(arg1) {
+  return window['go']['main']['App']['SearchCli'](arg1);
+}
+
 export function SearchValues(arg1) {
   return window['go']['main']['App']['SearchValues'](arg1);
 }

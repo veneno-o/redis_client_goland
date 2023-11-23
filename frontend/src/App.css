@@ -10,3 +10,6 @@
 .ant-notification-notice-message {
   color: #fff !important;
 }
+body {
+  overflow: hidden;
+}

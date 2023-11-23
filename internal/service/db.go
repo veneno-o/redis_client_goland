@@ -53,7 +53,7 @@ func DbList(identity string) ([]*define.DbItem, error) {
 
 	n, _ := strconv.Atoi(result[1].(string))
 	dbs := make([]*define.DbItem, n)
-	for i, _ := range dbs {
+	for i := range dbs {
 		item := &define.DbItem{
 			Key: fmt.Sprintf("db%d", i),
 		}

@@ -24,3 +24,10 @@ export interface ConnList {
   type: string;
   userName: string;
 }
+// 数据查询类型
+export interface SearchKey {
+  conn_identity: string;
+  db: number;
+  keyword: string;
+  keyType: string;
+}
