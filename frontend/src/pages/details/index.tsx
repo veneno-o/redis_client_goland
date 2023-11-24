@@ -13,7 +13,7 @@ import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DelHash, DelString, SearchValues } from "../../../wailsjs/go/main/App";
 import { classNames, typeTagMap } from "../../helper/utils";
 import { useStore } from "../../hooks/store";
@@ -28,10 +28,11 @@ import Style from "./index.module.css";
 
 export default function Details() {
   // @ts-ignore
-  const { state } = useStore();
+  const { state, dispatch } = useStore();
   const identity = state.identity || localStorage.getItem("identity");
   const { Option } = Select;
   const [tableData, setTableData] = useState<TableDataType[]>([]);
+  const navigate = useNavigate();
   const columns: ColumnsType<TableDataType> = [
     {
       title: "Type",
@@ -230,6 +231,17 @@ export default function Details() {
                   columns={columns}
                   dataSource={tableData}
                   pagination={false}
+                  onRow={(record, index) => {
+                    return {
+                      onClick() {
+                        navigate("/look");
+                        dispatch({
+                          type: "set_detailInfo",
+                          data: record,
+                        });
+                      },
+                    };
+                  }}
                 />
               </ConfigProvider>
             </div>

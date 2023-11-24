@@ -73,8 +73,9 @@ export interface AddType {
 // storeType
 export interface StoreType {
   identity: string;
+  detailInfo: AddType;
 }
 export interface PayloadType {
-  type: "set_identity";
+  type: "set_identity" | "set_detailInfo";
   data: anyObj;
 }

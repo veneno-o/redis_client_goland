@@ -4,6 +4,13 @@ import reducer from "./reduer";
 
 const initState = {
   identity: "",
+  detailInfo: {
+    type: "",
+    key: "",
+    value: "",
+    hashValue: [{}],
+    ttl: 0,
+  },
 } as StoreType;
 
 const context = createContext(initState);

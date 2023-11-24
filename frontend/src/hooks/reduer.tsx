@@ -10,6 +10,23 @@ function reducer(state: StoreType, payload: PayloadType) {
         ...state,
         identity,
       };
+    case "set_detailInfo":
+      const detailInfo = payload.data.detailInfo || {};
+      console.log("111", {
+        ...state,
+        detailInfo: {
+          ...state.detailInfo,
+          ...detailInfo,
+        },
+      });
+
+      return {
+        ...state,
+        detailInfo: {
+          ...state.detailInfo,
+          ...detailInfo,
+        },
+      };
     default:
       return {
         ...state,
