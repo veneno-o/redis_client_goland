@@ -1,9 +1,9 @@
 import { RouterProvider, createHashRouter } from "react-router-dom";
-import AddEdit from "../pages/addEdit";
+import Add from "../pages/add";
 import Details from "../pages/details";
 import Home from "../pages/home";
+import Look from "../pages/look";
 import NoFound from "../pages/nofound";
-import Test from "../pages/test";
 
 const routers = createHashRouter([
   {
@@ -17,28 +17,16 @@ const routers = createHashRouter([
     ],
   },
   {
-    path: "/:identity",
+    path: "/details",
     element: <Details></Details>,
-    children: [
-      // {
-      //     index: true, // default child outlet
-      //     element: <Hello></Hello>,
-      // },
-    ],
   },
   {
-    path: "/addedit",
-    element: <AddEdit></AddEdit>,
-    children: [
-      // {
-      //     index: true, // default child outlet
-      //     element: <Hello></Hello>,
-      // },
-    ],
+    path: "/add",
+    element: <Add></Add>,
   },
   {
-    path: "/test",
-    element: <Test></Test>,
+    path: "/look",
+    element: <Look></Look>,
   },
   { path: "*", element: <NoFound></NoFound> },
 ]);

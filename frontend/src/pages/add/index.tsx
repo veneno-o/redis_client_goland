@@ -15,20 +15,25 @@ import { Content, Header } from "antd/es/layout/layout";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddString } from "../../../wailsjs/go/main/App";
-import { AddType } from "../../types";
+import { useStore } from "../../hooks/store";
+import { AddType } from "../../types/index.d";
 import Style from "./index.module.css";
 const { Option } = Select;
-const initStringForm = {
-  conn_identity: "",
-  type: "string",
-  key: "",
-  value: "",
-  hashValue: [{}],
-  ttl: 0,
-} as AddType;
+
 export default function AddEdit(props: any) {
+  // @ts-ignore
+  const { state } = useStore();
+  const identity = state.identity || localStorage.getItem("identity");
   const {} = props;
   const navigate = useNavigate();
+  const initStringForm = {
+    conn_identity: identity,
+    type: "string",
+    key: "",
+    value: "",
+    hashValue: [{}],
+    ttl: 0,
+  } as AddType;
   const [formData, setFormData] = useState<AddType>(initStringForm);
   const disabBtn = !(Boolean(formData.key) && Boolean(formData.value));
   const valArea =

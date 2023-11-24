@@ -12,7 +12,8 @@ import {
   ConnectionEdit,
   ConnectionList,
 } from "../../../wailsjs/go/main/App";
-import { ConnAreaState, ConnList, FieldType } from "../../types";
+import { useStore } from "../../hooks/store";
+import { ConnAreaState, ConnList, FieldType } from "../../types/index.d";
 import Style from "./index.module.css";
 const initForm = {
   name: "127.0.0.1",
@@ -23,6 +24,8 @@ const initForm = {
   identity: "",
 };
 export default function Home() {
+  // @ts-ignore
+  const { dispatch } = useStore();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   // 0 展示连接列表 1 新建连接 2 编辑连接
@@ -101,7 +104,8 @@ export default function Home() {
     notification.destroy();
     ConnectDb(identity).then((res) => {
       if (res.code == 200) {
-        navigate("/" + identity);
+        dispatch({ type: "set_identity", data: { identity } });
+        navigate("/details");
         notification.success({
           message: res.msg,
         });

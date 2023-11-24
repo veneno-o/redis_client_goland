@@ -70,3 +70,11 @@ export interface AddType {
   ttl: number;
   hashValue: anyObj[];
 }
+// storeType
+export interface StoreType {
+  identity: string;
+}
+export interface PayloadType {
+  type: "set_identity";
+  data: anyObj;
+}

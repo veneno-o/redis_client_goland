@@ -13,15 +13,23 @@ import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DelHash, DelString, SearchValues } from "../../../wailsjs/go/main/App";
 import { classNames, typeTagMap } from "../../helper/utils";
-import { DelKeyType, SearchItem, SearchKey, TableDataType } from "../../types";
+import { useStore } from "../../hooks/store";
+import {
+  DelKeyType,
+  SearchItem,
+  SearchKey,
+  TableDataType,
+} from "../../types/index.d";
 import Cli from "./components/cli";
 import Style from "./index.module.css";
 
 export default function Details() {
-  const { identity } = useParams();
+  // @ts-ignore
+  const { state } = useStore();
+  const identity = state.identity || localStorage.getItem("identity");
   const { Option } = Select;
   const [tableData, setTableData] = useState<TableDataType[]>([]);
   const columns: ColumnsType<TableDataType> = [
@@ -39,7 +47,7 @@ export default function Details() {
       title: "key",
       dataIndex: "key",
       key: "key",
-      render: (text) => <Link to="/addedit">{text}</Link>,
+      render: (text) => <Link to="/add">{text}</Link>,
     },
     {
       title: "ttl",

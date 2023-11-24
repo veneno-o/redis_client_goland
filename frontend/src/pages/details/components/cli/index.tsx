@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import { SearchCli } from "../../../../../wailsjs/go/main/App";
 import { classNames } from "../../../../helper/utils";
-import { CliMsg, ICli } from "../../../../types";
+import { useStore } from "../../../../hooks/store";
+import { CliMsg, ICli } from "../../../../types/index.d";
 import Style from "./index.module.css";
 
 export default function Cli(props: any) {
   const { setShowCli } = props;
-  const { identity } = useParams();
+  // @ts-ignore
+  const { state } = useStore();
+  const identity = state.identity || localStorage.getItem("identity");
   const [text, setText] = useState("");
   const [msg, setMsg] = useState<CliMsg[]>([
     { text: "123", type: "success" },
@@ -61,8 +63,6 @@ export default function Cli(props: any) {
         ]);
       }
       setText("");
-
-      console.log("res.data", res);
     });
   }
   // 文本改变
