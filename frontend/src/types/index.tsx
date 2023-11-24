@@ -53,3 +53,8 @@ export interface SearchItem {
   type: string;
   key: string;
 }
+
+export interface DelKeyType {
+  conn_identity: string;
+  key: string;
+}

@@ -13,3 +13,7 @@
 body {
   overflow: hidden;
 }
+.ant-notification-notice-message {
+  text-align: left !important;
+  margin-left: 40px !important;
+}

@@ -14,9 +14,9 @@ import { Content, Header } from "antd/es/layout/layout";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { SearchValues } from "../../../wailsjs/go/main/App";
+import { DelHash, DelString, SearchValues } from "../../../wailsjs/go/main/App";
 import { classNames, typeTagMap } from "../../helper/utils";
-import { SearchItem, SearchKey, TableDataType } from "../../types";
+import { DelKeyType, SearchItem, SearchKey, TableDataType } from "../../types";
 import Cli from "./components/cli";
 import Style from "./index.module.css";
 
@@ -50,10 +50,16 @@ export default function Details() {
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
+      render: (_, tableData, i) => (
         <div>
           <Button className="mr-[8px]">编辑</Button>
-          <Button type="primary" danger>
+          <Button
+            type="primary"
+            danger
+            onClick={() => {
+              handDelKey(tableData, i);
+            }}
+          >
             删除
           </Button>
         </div>
@@ -105,6 +111,49 @@ export default function Details() {
   // 选择框改变
   function handSelChange(type: string) {
     setSearch((s) => ({ ...s, type }));
+  }
+  // 删除key
+  function handDelKey(tableDataItem: TableDataType, i: number) {
+    switch (tableDataItem.type) {
+      case "string":
+        DelString({
+          conn_identity: identity,
+          key: tableDataItem.key,
+        } as DelKeyType).then((res) => {
+          if (res.code == 200) {
+            notification.success({
+              message: res.msg,
+            });
+            const newTableData = tableData.filter((item, index) => index != i);
+            setTableData(newTableData);
+          } else {
+            notification.error({
+              message: res.msg,
+            });
+          }
+        });
+        break;
+      case "hash":
+        DelHash({
+          conn_identity: identity,
+          key: tableDataItem.key,
+        } as DelKeyType).then((res) => {
+          if (res.code == 200) {
+            notification.success({
+              message: res.msg,
+            });
+            const newTableData = tableData.filter((item, index) => index != i);
+            setTableData(newTableData);
+          } else {
+            notification.error({
+              message: res.msg,
+            });
+          }
+        });
+        break;
+      default:
+        break;
+    }
   }
   return (
     <Layout
