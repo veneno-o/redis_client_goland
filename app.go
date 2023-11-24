@@ -56,7 +56,7 @@ func (a *App) ConnectionList() define.M {
 	if err != nil {
 		return define.M{Code: define.FailCode, Msg: err.Error()}
 	}
-	return define.M{Code: define.SuccessCode, Data: connList}
+	return define.M{Code: define.SuccessCode, Data: connList, Msg: "查找成功"}
 }
 
 // 编辑连接
@@ -90,6 +90,7 @@ func (a *App) DbList(identity string) define.M {
 	return define.M{
 		Code: define.SuccessCode,
 		Data: list,
+		Msg:  "数据库列表获取成功",
 	}
 }
 
@@ -114,6 +115,7 @@ func (a *App) DbInfo(identity string) define.M {
 	return define.M{
 		Code: define.SuccessCode,
 		Data: info,
+		Msg:  "数据库详情获取成功",
 	}
 }
 
@@ -129,6 +131,7 @@ func (a *App) SearchValues(search *define.SearchKey) define.M {
 	return define.M{
 		Code: define.SuccessCode,
 		Data: values,
+		Msg:  "查询成功",
 	}
 }
 
@@ -144,6 +147,7 @@ func (a *App) SearchCli(cli *define.Cli) define.M {
 	return define.M{
 		Code: define.SuccessCode,
 		Data: exeCli,
+		Msg:  "查询成功",
 	}
 }
 
