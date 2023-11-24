@@ -46,6 +46,7 @@ type SearchKey struct {
 
 // 查询数据返回格式
 type ReplyValue struct {
+	Key   string        `json:"key"`
 	Value any           `json:"value"`
 	TTL   time.Duration `json:"ttl"`
 	Type  string        `json:"type"`
@@ -96,5 +97,5 @@ type UpdateHashItem struct {
 // cli操作
 type Cli struct {
 	ConnIdentity string `json:"conn_identity"`
-	Cli          []any`json:"cli"`
+	Cli          []any  `json:"cli"`
 }

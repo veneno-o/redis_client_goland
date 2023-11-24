@@ -122,6 +122,7 @@ func SearchValues(req *define.SearchKey) ([]*define.ReplyValue, error) {
 		reply := new(define.ReplyValue)
 		// 拿到准确的key
 		key := iterator.Val()
+		reply.Key = key
 		//	判断类型
 		type_, err := rdb.Type(context.Background(), key).Result()
 		if err != nil {
