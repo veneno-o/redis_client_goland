@@ -58,3 +58,15 @@ export interface DelKeyType {
   conn_identity: string;
   key: string;
 }
+export interface anyObj {
+  [key: string]: string;
+}
+// 添加string
+export interface AddType {
+  type: string;
+  conn_identity: string;
+  key: string;
+  value: string;
+  ttl: number;
+  hashValue: anyObj[];
+}

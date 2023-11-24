@@ -13,7 +13,7 @@ import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { DelHash, DelString, SearchValues } from "../../../wailsjs/go/main/App";
 import { classNames, typeTagMap } from "../../helper/utils";
 import { DelKeyType, SearchItem, SearchKey, TableDataType } from "../../types";
@@ -39,7 +39,7 @@ export default function Details() {
       title: "key",
       dataIndex: "key",
       key: "key",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <Link to="/addedit">{text}</Link>,
     },
     {
       title: "ttl",
