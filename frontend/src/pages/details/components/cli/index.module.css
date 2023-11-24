@@ -19,3 +19,11 @@
 ::-webkit-scrollbar {
   display: none;
 }
+.botBar {
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1d1d1d;
+  background-color: #000;
+}

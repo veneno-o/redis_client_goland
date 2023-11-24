@@ -189,7 +189,7 @@ export default function Details() {
           <div
             className={classNames(Style.cliBox, showCli ? Style.active : "")}
           >
-            <Cli></Cli>
+            <Cli setShowCli={setShowCli}></Cli>
           </div>
           {/* 24px */}
           <div className={Style.botBar}>

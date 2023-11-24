@@ -5,7 +5,8 @@ import { classNames } from "../../../../helper/utils";
 import { CliMsg, ICli } from "../../../../types";
 import Style from "./index.module.css";
 
-export default function Cli() {
+export default function Cli(props: any) {
+  const { setShowCli } = props;
   const { identity } = useParams();
   const [text, setText] = useState("");
   const [msg, setMsg] = useState<CliMsg[]>([
@@ -75,6 +76,28 @@ export default function Cli() {
   }
   return (
     <div className="w-full h-full overflow-scroll">
+      {/* 24px */}
+      <div className={classNames("px-[8px]", Style.botBar)}>
+        <div>&gt; _ CLI</div>
+        <div className="flex text-[18px]">
+          <div
+            onClick={() => {
+              setShowCli(false);
+            }}
+            className="cursor-pointer p-[4px]"
+          >
+            -
+          </div>
+          <div
+            onClick={() => {
+              setShowCli(false);
+            }}
+            className="ml-[8px] cursor-pointer p-[4px]"
+          >
+            x
+          </div>
+        </div>
+      </div>
       {msg.map((item, index) => (
         <div
           key={index}
