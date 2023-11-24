@@ -98,6 +98,7 @@ export default function Home() {
   }, [area]);
   // 建立连接
   async function handGetConn(identity: string) {
+    notification.destroy();
     ConnectDb(identity).then((res) => {
       if (res.code == 200) {
         navigate("/" + identity);

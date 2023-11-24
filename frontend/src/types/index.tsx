@@ -41,3 +41,10 @@ export interface CliMsg {
   type: "success" | "error";
   text: string;
 }
+
+export interface TableDataType {
+  key: string;
+  ttl: string;
+  type: string;
+  value: any;
+}

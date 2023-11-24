@@ -5,9 +5,9 @@ import {
   Input,
   Layout,
   Select,
-  Space,
   Table,
   Tag,
+  notification,
 } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
@@ -15,44 +15,26 @@ import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { SearchValues } from "../../../wailsjs/go/main/App";
-import { classNames } from "../../helper/utils";
-import { SearchKey } from "../../types";
+import { classNames, typeTagMap } from "../../helper/utils";
+import { SearchKey, TableDataType } from "../../types";
 import Cli from "./components/cli";
 import Style from "./index.module.css";
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string[];
-}
+
 export default function Details() {
   const { identity } = useParams();
   const { Option } = Select;
-  const data: DataType[] = [
+  const [tableData, setTableData] = useState<TableDataType[]>([]);
+  const columns: ColumnsType<TableDataType> = [
     {
-      key: "1",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"],
+      title: "Type",
+      key: "type",
+      dataIndex: "type",
+      render: (text, item) => (
+        <Tag color={typeTagMap.get(text)} key={item.key + String(item.value)}>
+          {text}
+        </Tag>
+      ),
     },
-    {
-      key: "2",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"],
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      age: 32,
-      address: "Sydney No. 1 Lake Park",
-      tags: ["cool", "teacher"],
-    },
-  ];
-  const columns: ColumnsType<DataType> = [
     {
       title: "key",
       dataIndex: "key",
@@ -60,43 +42,21 @@ export default function Details() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Tags",
-      key: "tags",
-      dataIndex: "tags",
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? "geekblue" : "green";
-            if (tag === "loser") {
-              color = "volcano";
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
+      title: "ttl",
+      dataIndex: "ttl",
+      key: "ttl",
+      render: (text) => <span>{text == -1 ? "无限制" : text}</span>,
     },
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
+        <div>
+          <Button className="mr-[8px]">编辑</Button>
+          <Button type="primary" danger>
+            删除
+          </Button>
+        </div>
       ),
     },
   ];
@@ -105,12 +65,20 @@ export default function Details() {
     const search = {
       conn_identity: identity || "",
       db: 0,
-      keyword: "key",
-      keyType: "string",
+      keyword: "",
+      keyType: "",
     } as SearchKey;
-    console.log("search:", search);
     SearchValues(search).then((res) => {
-      console.log("res:", res);
+      if (res.code == 200) {
+        setTableData(res.data);
+        notification.success({
+          message: res.msg,
+        });
+      } else {
+        notification.error({
+          message: res.msg,
+        });
+      }
     });
   }, []);
   const selectBefore = (
@@ -181,7 +149,11 @@ export default function Details() {
                   },
                 }}
               >
-                <Table columns={columns} dataSource={data} pagination={false} />
+                <Table
+                  columns={columns}
+                  dataSource={tableData}
+                  pagination={false}
+                />
               </ConfigProvider>
             </div>
           </div>
