@@ -48,3 +48,8 @@ export interface TableDataType {
   type: string;
   value: any;
 }
+
+export interface SearchItem {
+  type: string;
+  key: string;
+}

@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { SearchValues } from "../../../wailsjs/go/main/App";
 import { classNames, typeTagMap } from "../../helper/utils";
-import { SearchKey, TableDataType } from "../../types";
+import { SearchItem, SearchKey, TableDataType } from "../../types";
 import Cli from "./components/cli";
 import Style from "./index.module.css";
 
@@ -61,14 +61,30 @@ export default function Details() {
     },
   ];
   const [showCli, setShowCli] = useState(false);
+  // 搜索条件
+  const [search, setSearch] = useState<SearchItem>({
+    type: "",
+    key: "",
+  });
   useEffect(() => {
-    const search = {
+    handSearch();
+  }, []);
+  const selectBefore = (
+    <Select value={search.type} onChange={handSelChange} className="w-[80px]">
+      <Option value="">All</Option>
+      <Option value="string">String</Option>
+      <Option value="hash">Hash</Option>
+    </Select>
+  );
+  // 条件搜索
+  function handSearch() {
+    const searchItem = {
       conn_identity: identity || "",
       db: 0,
-      keyword: "",
-      keyType: "",
+      keyword: search.key,
+      keyType: search.type,
     } as SearchKey;
-    SearchValues(search).then((res) => {
+    SearchValues(searchItem).then((res) => {
       if (res.code == 200) {
         setTableData(res.data);
         notification.success({
@@ -80,13 +96,16 @@ export default function Details() {
         });
       }
     });
-  }, []);
-  const selectBefore = (
-    <Select defaultValue="string">
-      <Option value="string">string</Option>
-      <Option value="hash">hash</Option>
-    </Select>
-  );
+  }
+  // 输入框文本改变
+  function handChange(e: any) {
+    const key = e.target.value;
+    setSearch((s) => ({ ...s, key }));
+  }
+  // 选择框改变
+  function handSelChange(type: string) {
+    setSearch((s) => ({ ...s, type }));
+  }
   return (
     <Layout
       hasSider
@@ -119,15 +138,16 @@ export default function Details() {
           <div className={Style.tableBox}>
             <div className="mt-[20px] flex justify-between">
               <Input
+                value={search.key}
+                onChange={handChange}
                 size="large"
                 addonBefore={selectBefore}
                 addonAfter={
-                  <div className=" cursor-pointer" onClick={() => {}}>
+                  <div className=" cursor-pointer" onClick={handSearch}>
                     <SearchOutlined />
                     <span className="pl-[4px]">Search</span>
                   </div>
                 }
-                defaultValue="mysite"
               />
               <Button
                 onClick={() => {
