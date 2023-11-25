@@ -13,7 +13,7 @@ import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DelHash, DelString, SearchValues } from "../../../wailsjs/go/main/App";
 import { classNames, typeTagMap } from "../../helper/utils";
 import { useStore } from "../../hooks/store";
@@ -29,7 +29,9 @@ import Style from "./index.module.css";
 export default function Details() {
   // @ts-ignore
   const { state, dispatch } = useStore();
-  const identity = state.identity || localStorage.getItem("identity");
+  const identity =
+    state.identity || JSON.parse(localStorage.getItem("identity") || "");
+
   const { Option } = Select;
   const [tableData, setTableData] = useState<TableDataType[]>([]);
   const navigate = useNavigate();
@@ -48,7 +50,6 @@ export default function Details() {
       title: "key",
       dataIndex: "key",
       key: "key",
-      render: (text) => <Link to="/add">{text}</Link>,
     },
     {
       title: "ttl",
@@ -61,11 +62,19 @@ export default function Details() {
       key: "action",
       render: (_, tableData, i) => (
         <div>
-          <Button className="mr-[8px]">编辑</Button>
+          <Button
+            className="mr-[8px]"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            编辑
+          </Button>
           <Button
             type="primary"
             danger
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               handDelKey(tableData, i);
             }}
           >
@@ -83,7 +92,7 @@ export default function Details() {
   });
   useEffect(() => {
     handSearch();
-  }, []);
+  }, [identity]);
   const selectBefore = (
     <Select value={search.type} onChange={handSelChange} className="w-[80px]">
       <Option value="">All</Option>
@@ -208,8 +217,8 @@ export default function Details() {
                 }
               />
               <Button
-                onClick={() => {
-                  console.log("添加key");
+                onClick={(e) => {
+                  navigate("/crud?type=add");
                 }}
                 size="large"
                 className="ml-[8px]"
@@ -234,11 +243,11 @@ export default function Details() {
                   onRow={(record, index) => {
                     return {
                       onClick() {
-                        navigate("/look");
                         dispatch({
                           type: "set_detailInfo",
-                          data: record,
+                          data: { detailInfo: record },
                         });
+                        navigate("/crud?type=look");
                       },
                     };
                   }}

@@ -9,7 +9,8 @@ export default function Cli(props: any) {
   const { setShowCli } = props;
   // @ts-ignore
   const { state } = useStore();
-  const identity = state.identity || localStorage.getItem("identity");
+  const identity =
+    state.identity || JSON.parse(localStorage.getItem("identity") || "");
   const [text, setText] = useState("");
   const [msg, setMsg] = useState<CliMsg[]>([
     { text: "123", type: "success" },

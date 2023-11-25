@@ -1,8 +1,7 @@
 import { RouterProvider, createHashRouter } from "react-router-dom";
-import Add from "../pages/add";
+import CRUD from "../pages/crud";
 import Details from "../pages/details";
 import Home from "../pages/home";
-import Look from "../pages/look";
 import NoFound from "../pages/nofound";
 
 const routers = createHashRouter([
@@ -21,12 +20,8 @@ const routers = createHashRouter([
     element: <Details></Details>,
   },
   {
-    path: "/add",
-    element: <Add></Add>,
-  },
-  {
-    path: "/look",
-    element: <Look></Look>,
+    path: "/crud",
+    element: <CRUD></CRUD>,
   },
   { path: "*", element: <NoFound></NoFound> },
 ]);

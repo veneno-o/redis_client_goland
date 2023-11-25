@@ -12,19 +12,22 @@ import {
 import TextArea from "antd/es/input/TextArea";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AddString } from "../../../wailsjs/go/main/App";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AddString, UpdateString } from "../../../wailsjs/go/main/App";
 import { useStore } from "../../hooks/store";
 import { AddType } from "../../types/index.d";
 import Style from "./index.module.css";
 const { Option } = Select;
 
-export default function AddEdit(props: any) {
+export default function AddEdit() {
   // @ts-ignore
   const { state } = useStore();
-  const identity = state.identity || localStorage.getItem("identity");
-  const {} = props;
+  const identity =
+    state.identity || JSON.parse(localStorage.getItem("identity") || "");
+  const location = useLocation();
+  const [type, setType] = useState("");
+
   const navigate = useNavigate();
   const initStringForm = {
     conn_identity: identity,
@@ -36,17 +39,28 @@ export default function AddEdit(props: any) {
   } as AddType;
   const [formData, setFormData] = useState<AddType>(initStringForm);
   const disabBtn = !(Boolean(formData.key) && Boolean(formData.value));
+  const detailInfo = {
+    ...state.detailInfo,
+    ttl: state.detailInfo.ttl < 0 ? 0 : state.detailInfo.ttl,
+  };
+  useEffect(() => {
+    // 从location对象中获取查询参数
+    const queryParams = new URLSearchParams(location.search);
+    const type = queryParams.get("type");
+
+    setType(type || "");
+    if (type == "look") {
+      setFormData((fd) => ({
+        ...fd,
+        ...detailInfo,
+      }));
+    }
+  }, [location.search]);
   const valArea =
     formData.type == "string" ? (
       <Row className="mt-[20px]">
         <div className="mb-[8px]">Value:</div>
-        <TextArea
-          value={formData.value}
-          onChange={handValChange}
-          rows={4}
-          placeholder="maxLength is 6"
-          maxLength={6}
-        />
+        <TextArea rows={4} value={formData.value} onChange={handValChange} />
       </Row>
     ) : (
       formData.hashValue.map((item) => {
@@ -97,26 +111,52 @@ export default function AddEdit(props: any) {
     setFormData((fd) => ({ ...fd, key }));
   }
   function handAddKey(e: any) {
-    switch (formData.type) {
-      case "string":
-        AddString(formData).then((res) => {
-          if (res.code == 200) {
-            notification.success({
-              message: res.msg,
-            });
-            navigate("/look");
-          } else {
-            notification.error({
-              message: res.msg,
-            });
-          }
-        });
-        break;
-      case "hash":
-        break;
+    if (type == "look") {
+      // 编辑的逻辑
+      switch (formData.type) {
+        case "string":
+          UpdateString(formData).then((res) => {
+            if (res.code == 200) {
+              notification.success({
+                message: res.msg,
+              });
+              navigate("/details");
+            } else {
+              notification.error({
+                message: res.msg,
+              });
+            }
+          });
+          break;
+        case "hash":
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
+    } else {
+      // 添加的逻辑
+      switch (formData.type) {
+        case "string":
+          AddString(formData).then((res) => {
+            if (res.code == 200) {
+              notification.success({
+                message: res.msg,
+              });
+              navigate("/details");
+            } else {
+              notification.error({
+                message: res.msg,
+              });
+            }
+          });
+          break;
+        case "hash":
+          break;
+
+        default:
+          break;
+      }
     }
   }
 
@@ -154,7 +194,7 @@ export default function AddEdit(props: any) {
                 <div className="mb-[8px]">Key Type*</div>
                 <Select
                   className="w-full"
-                  defaultValue={formData.type}
+                  value={formData.type}
                   onChange={handleChange}
                 >
                   <Option value="string">String</Option>
@@ -173,6 +213,7 @@ export default function AddEdit(props: any) {
             <Row>
               <div className="mb-[8px]">Key Name*</div>
               <Input
+                disabled={type != "add"}
                 value={formData.key}
                 onChange={handKeyChange}
                 placeholder="maxLength is 6"
@@ -195,7 +236,7 @@ export default function AddEdit(props: any) {
                 className="ml-[8px]"
                 onClick={handAddKey}
               >
-                Add Key
+                {type == "look" ? "Edit Key" : "Add Key"}
               </Button>
             </Row>
           </div>
