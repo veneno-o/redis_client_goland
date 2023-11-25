@@ -1,4 +1,4 @@
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import {
   Button,
   Col,
@@ -14,7 +14,7 @@ import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AddString, UpdateString } from "../../../wailsjs/go/main/App";
+import { AddHash, AddString, UpdateString } from "../../../wailsjs/go/main/App";
 import { useStore } from "../../hooks/store";
 import { AddType } from "../../types/index.d";
 import Style from "./index.module.css";
@@ -34,20 +34,24 @@ export default function AddEdit() {
     type: "string",
     key: "",
     value: "",
-    hashValue: [{}],
+    hashValue: { a: "1" },
     ttl: 0,
   } as AddType;
   const [formData, setFormData] = useState<AddType>(initStringForm);
-  const disabBtn = !(Boolean(formData.key) && Boolean(formData.value));
+  const disabBtn =
+    formData.type == "string"
+      ? !(Boolean(formData.key) && Boolean(formData.value))
+      : !(Boolean(formData.key) && Object.keys(formData.hashValue).length > 0);
   const detailInfo = {
     ...state.detailInfo,
     ttl: state.detailInfo.ttl < 0 ? 0 : state.detailInfo.ttl,
+    hashValue:
+      state.detailInfo.type == "hash" ? state.detailInfo.value : [{ a: "1" }],
   };
   useEffect(() => {
     // 从location对象中获取查询参数
     const queryParams = new URLSearchParams(location.search);
     const type = queryParams.get("type");
-
     setType(type || "");
     if (type == "look") {
       setFormData((fd) => ({
@@ -56,6 +60,7 @@ export default function AddEdit() {
       }));
     }
   }, [location.search]);
+
   const valArea =
     formData.type == "string" ? (
       <Row className="mt-[20px]">
@@ -63,30 +68,32 @@ export default function AddEdit() {
         <TextArea rows={4} value={formData.value} onChange={handValChange} />
       </Row>
     ) : (
-      formData.hashValue.map((item) => {
-        const keys = Object.keys(item);
+      Object.keys(formData.hashValue).map((field, index) => {
         return (
           <Row className="mb-[20px]">
             <Col span={10}>
               <div className="mb-[8px]">Key Type*</div>
               <Input
-                value={formData.ttl}
+                value={field}
                 onChange={handTTLChange}
-                placeholder="No Limit"
+                placeholder="Please input field"
               />
             </Col>
             <Col span={10} offset={2}>
               <div className="mb-[8px]">TTL</div>
               <Input
-                value={formData.ttl}
+                value={formData.hashValue[field]}
                 onChange={handTTLChange}
-                placeholder="No Limit"
+                placeholder="Please input value"
               />
             </Col>
             <Col span={2}>
               <div className="mb-[34px]"></div>
-              <div className="flex justify-center">
-                <PlusCircleOutlined className=" cursor-pointer" />
+              <div className="flex ">
+                <DeleteOutlined className="mr-[8px] ml-[20px] cursor-pointer" />
+                {index == Object.keys(formData.hashValue).length - 1 && (
+                  <PlusCircleOutlined className=" cursor-pointer" />
+                )}
               </div>
             </Col>
           </Row>
@@ -134,7 +141,7 @@ export default function AddEdit() {
         default:
           break;
       }
-    } else {
+    } else if (type == "add") {
       // 添加的逻辑
       switch (formData.type) {
         case "string":
@@ -152,6 +159,24 @@ export default function AddEdit() {
           });
           break;
         case "hash":
+          const props = {
+            ...formData,
+            value: {
+              ...formData.hashValue,
+            },
+          };
+          AddHash(props).then((res) => {
+            if (res.code == 200) {
+              notification.success({
+                message: res.msg,
+              });
+              navigate("/details");
+            } else {
+              notification.error({
+                message: res.msg,
+              });
+            }
+          });
           break;
 
         default:

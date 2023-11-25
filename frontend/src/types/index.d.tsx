@@ -68,7 +68,7 @@ export interface AddType {
   key: string;
   value: string;
   ttl: number;
-  hashValue: anyObj[];
+  hashValue: anyObj;
 }
 // storeType
 export interface StoreType {
