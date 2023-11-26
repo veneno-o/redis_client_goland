@@ -18,7 +18,7 @@ import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DelHash, DelString, SearchValues } from "../../../wailsjs/go/main/App";
 import Wx from "../../assets/images/wx.jpg";
 import { classNames, typeTagMap } from "../../helper/utils";
@@ -210,7 +210,7 @@ export default function Details() {
           background: "rgb(15,22,51)",
         }}
       >
-        <div className={Style.logo}></div>
+        <Link to="/" className={Style.logo}></Link>
         <div className="py-[30px] h-[140px] flex flex-col justify-between">
           <Popover
             placement="right"

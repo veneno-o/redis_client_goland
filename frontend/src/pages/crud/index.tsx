@@ -19,7 +19,7 @@ import TextArea from "antd/es/input/TextArea";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AddHash,
   AddString,
@@ -298,7 +298,7 @@ export default function AddEdit() {
           background: "rgb(15,22,51)",
         }}
       >
-        <div className={Style.logo}></div>
+        <Link to="/" className={Style.logo}></Link>
         <div className="py-[30px] h-[140px] flex flex-col justify-between">
           <Popover
             placement="right"
