@@ -8,7 +8,12 @@
 
 ## 打包
 
-- 执行`wails build`命令， 打包后的可执行文件位于 ``/build/bin`
+- 执行`wails build`命令， 打包后的可执行文件位于 `/build/bin`
+
+## 更换 app 图标
+
+- 删除 `build/windows/icon.ico`
+- 更换 `build/appicon.png` (需要固定大小 1024 \* 1024)
 
 ## 版本
 
