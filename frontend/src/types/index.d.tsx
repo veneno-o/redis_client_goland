@@ -38,7 +38,7 @@ export interface ICli {
 }
 // cli消息
 export interface CliMsg {
-  type: "success" | "error";
+  type: "success" | "error" | "info";
   text: string;
 }
 
