@@ -29,6 +29,7 @@ import {
   SearchKey,
   TableDataType,
 } from "../../types/index.d";
+import HeadCom from "../components/head";
 import Cli from "./components/cli";
 import Style from "./index.module.css";
 
@@ -221,7 +222,9 @@ export default function Details() {
             background: "rgb(15,22,51)",
             height: "48px",
           }}
-        ></Header>
+        >
+          <HeadCom></HeadCom>
+        </Header>
         <Content
           style={{
             background: "#000",

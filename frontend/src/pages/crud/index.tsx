@@ -4,8 +4,6 @@ import {
   PlusCircleOutlined,
   WechatOutlined,
 } from "@ant-design/icons";
-import Wx from "../../assets/images/wx.jpg";
-
 import {
   Button,
   Col,
@@ -28,9 +26,11 @@ import {
   UpdateHashItem,
   UpdateString,
 } from "../../../wailsjs/go/main/App";
+import Wx from "../../assets/images/wx.jpg";
 import { formatHashValue } from "../../helper/utils";
 import { useStore } from "../../hooks/store";
 import { AddType, anyObj } from "../../types/index.d";
+import HeadCom from "../components/head";
 import Style from "./index.module.css";
 const { Option } = Select;
 
@@ -326,7 +326,9 @@ export default function AddEdit() {
             background: "rgb(15,22,51)",
             height: "48px",
           }}
-        ></Header>
+        >
+          <HeadCom></HeadCom>
+        </Header>
         <Content
           style={{
             background: "#000",
