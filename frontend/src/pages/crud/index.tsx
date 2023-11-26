@@ -14,10 +14,15 @@ import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AddHash, AddString, UpdateString } from "../../../wailsjs/go/main/App";
+import {
+  AddHash,
+  AddString,
+  UpdateHashItem,
+  UpdateString,
+} from "../../../wailsjs/go/main/App";
 import { formatHashValue } from "../../helper/utils";
 import { useStore } from "../../hooks/store";
-import { AddType } from "../../types/index.d";
+import { AddType, anyObj } from "../../types/index.d";
 import Style from "./index.module.css";
 const { Option } = Select;
 
@@ -83,6 +88,7 @@ export default function AddEdit() {
           <Row className="mb-[20px]" key={index}>
             <Col span={10}>
               <Input
+                disabled={type != "add"}
                 value={item.field}
                 onChange={(e) => {
                   handFixField(e, index, "field");
@@ -102,12 +108,14 @@ export default function AddEdit() {
             <Col span={2}>
               <div className="mb-[10px]"></div>
               <div className="flex ">
-                <DeleteOutlined
-                  onClick={() => {
-                    handDelField(index);
-                  }}
-                  className="mr-[8px] ml-[20px] cursor-pointer"
-                />
+                {type == "add" && (
+                  <DeleteOutlined
+                    onClick={() => {
+                      handDelField(index);
+                    }}
+                    className="mr-[8px] ml-[20px] cursor-pointer"
+                  />
+                )}
                 {type == "add" &&
                   index == Object.keys(formData.hashValue).length - 1 && (
                     <PlusCircleOutlined
@@ -130,7 +138,7 @@ export default function AddEdit() {
     setFormData((fd) => ({ ...fd, value }));
   }
   function handTTLChange(e: any) {
-    const ttl = e.target.value;
+    const ttl = ~~e.target.value;
     setFormData((fd) => ({ ...fd, ttl }));
   }
   function handKeyChange(e: any) {
@@ -156,8 +164,28 @@ export default function AddEdit() {
           });
           break;
         case "hash":
-          // const item = formData.hashValue;
-          // Promise.all(UpdateHashItem(formData)).then((res) => {
+          const res = {};
+          formData.hashValue.forEach((item) => {
+            // @ts-ignore
+            res[item.field] = item.value;
+          });
+          const props = {
+            ...formData,
+            field: res as anyObj,
+          };
+          UpdateHashItem(props).then((res) => {
+            if (res.code == 200) {
+              notification.success({
+                message: res.msg,
+              });
+              navigate("/details");
+            } else {
+              notification.error({
+                message: res.msg,
+              });
+            }
+          });
+          // UpdateHashItem(formData).then((res) => {
           //   if (res.code == 200) {
           //     notification.success({
           //       message: res.msg,
