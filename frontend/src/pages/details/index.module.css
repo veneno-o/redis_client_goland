@@ -19,19 +19,17 @@
 }
 .tableBox {
   flex: 1;
-  height: calc(50%);
-  overflow-y: scroll;
-  overflow-x: hidden;
+  /* height: calc(50%); */
+  overflow: scroll;
 }
 .table {
-  margin-top: 50px;
-  background-color: #303030;
+  background-color: #202020;
 }
 .cliBox {
   border: 1px solid #1d1d1d;
   border-bottom: none;
   background-color: #000;
-  height: calc(50% - 24px);
+  height: calc(50% - 76px);
   display: none;
 }
 .cliBox.active {

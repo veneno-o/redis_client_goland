@@ -22,3 +22,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
 }
+/* .ant-table-tbody {
+  overflow: scroll;
+  height: calc(50vh - 64px);
+} */

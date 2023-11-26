@@ -247,31 +247,32 @@ export default function Details() {
           }}
           className={Style.main}
         >
+          {/* 搜索 */}
+          <div className="my-[20px] flex justify-between">
+            <Input
+              value={search.key}
+              onChange={handChange}
+              size="large"
+              addonBefore={selectBefore}
+              addonAfter={
+                <div className=" cursor-pointer" onClick={handSearch}>
+                  <SearchOutlined />
+                  <span className="pl-[4px]">Search</span>
+                </div>
+              }
+            />
+            <Button
+              onClick={(e) => {
+                navigate("/crud?type=add");
+              }}
+              size="large"
+              className="ml-[8px]"
+            >
+              +Key
+            </Button>
+          </div>
           {/* 50% */}
           <div className={Style.tableBox}>
-            <div className="mt-[20px] flex justify-between">
-              <Input
-                value={search.key}
-                onChange={handChange}
-                size="large"
-                addonBefore={selectBefore}
-                addonAfter={
-                  <div className=" cursor-pointer" onClick={handSearch}>
-                    <SearchOutlined />
-                    <span className="pl-[4px]">Search</span>
-                  </div>
-                }
-              />
-              <Button
-                onClick={(e) => {
-                  navigate("/crud?type=add");
-                }}
-                size="large"
-                className="ml-[8px]"
-              >
-                +Key
-              </Button>
-            </div>
             <div className={Style.table}>
               <ConfigProvider
                 theme={{
