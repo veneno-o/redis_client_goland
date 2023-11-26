@@ -55,7 +55,7 @@ export default function Details() {
       title: "ttl",
       dataIndex: "ttl",
       key: "ttl",
-      render: (text) => <span>{text == -1 ? "无限制" : text}</span>,
+      render: (text) => <span>{text == -1 ? "No limit" : text}</span>,
     },
     {
       title: "Action",
@@ -66,6 +66,7 @@ export default function Details() {
             className="mr-[8px]"
             onClick={(e) => {
               e.stopPropagation();
+              navigate("/crud?type=look");
             }}
           >
             编辑
@@ -111,9 +112,9 @@ export default function Details() {
     SearchValues(searchItem).then((res) => {
       if (res.code == 200) {
         setTableData(res.data);
-        notification.success({
-          message: res.msg,
-        });
+        // notification.success({
+        //   message: res.msg,
+        // });
       } else {
         notification.error({
           message: res.msg,

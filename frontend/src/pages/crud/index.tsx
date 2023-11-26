@@ -15,6 +15,7 @@ import { Content, Header } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AddHash, AddString, UpdateString } from "../../../wailsjs/go/main/App";
+import { formatHashValue } from "../../helper/utils";
 import { useStore } from "../../hooks/store";
 import { AddType } from "../../types/index.d";
 import Style from "./index.module.css";
@@ -34,20 +35,23 @@ export default function AddEdit() {
     type: "string",
     key: "",
     value: "",
-    hashValue: { a: "1" },
+    hashValue: [{ field: "", value: "" }],
     ttl: 0,
   } as AddType;
   const [formData, setFormData] = useState<AddType>(initStringForm);
   const disabBtn =
     formData.type == "string"
       ? !(Boolean(formData.key) && Boolean(formData.value))
-      : !(Boolean(formData.key) && Object.keys(formData.hashValue).length > 0);
+      : !(Boolean(formData.key) && formData.hashValue.length > 0);
   const detailInfo = {
     ...state.detailInfo,
     ttl: state.detailInfo.ttl < 0 ? 0 : state.detailInfo.ttl,
     hashValue:
-      state.detailInfo.type == "hash" ? state.detailInfo.value : [{ a: "1" }],
+      state.detailInfo.type == "hash"
+        ? formatHashValue(state.detailInfo.value)
+        : [{ field: "", value: "" }],
   };
+
   useEffect(() => {
     // 从location对象中获取查询参数
     const queryParams = new URLSearchParams(location.search);
@@ -61,6 +65,12 @@ export default function AddEdit() {
     }
   }, [location.search]);
 
+  useEffect(() => {
+    if (formData.hashValue.length == 0) {
+      handAddField();
+    }
+  }, [formData.hashValue]);
+
   const valArea =
     formData.type == "string" ? (
       <Row className="mt-[20px]">
@@ -68,38 +78,48 @@ export default function AddEdit() {
         <TextArea rows={4} value={formData.value} onChange={handValChange} />
       </Row>
     ) : (
-      Object.keys(formData.hashValue).map((field, index) => {
+      formData.hashValue.map((item, index) => {
         return (
-          <Row className="mb-[20px]">
+          <Row className="mb-[20px]" key={index}>
             <Col span={10}>
-              <div className="mb-[8px]">Key Type*</div>
               <Input
-                value={field}
-                onChange={handTTLChange}
+                value={item.field}
+                onChange={(e) => {
+                  handFixField(e, index, "field");
+                }}
                 placeholder="Please input field"
               />
             </Col>
             <Col span={10} offset={2}>
-              <div className="mb-[8px]">TTL</div>
               <Input
-                value={formData.hashValue[field]}
-                onChange={handTTLChange}
+                value={item.value}
+                onChange={(e) => {
+                  handFixField(e, index, "value");
+                }}
                 placeholder="Please input value"
               />
             </Col>
             <Col span={2}>
-              <div className="mb-[34px]"></div>
+              <div className="mb-[10px]"></div>
               <div className="flex ">
-                <DeleteOutlined className="mr-[8px] ml-[20px] cursor-pointer" />
-                {index == Object.keys(formData.hashValue).length - 1 && (
-                  <PlusCircleOutlined className=" cursor-pointer" />
-                )}
+                <DeleteOutlined
+                  onClick={() => {
+                    handDelField(index);
+                  }}
+                  className="mr-[8px] ml-[20px] cursor-pointer"
+                />
+                {type == "add" &&
+                  index == Object.keys(formData.hashValue).length - 1 && (
+                    <PlusCircleOutlined
+                      onClick={handAddField}
+                      className=" cursor-pointer"
+                    />
+                  )}
               </div>
             </Col>
           </Row>
         );
       })
-      // {formData.hashValue.map(item=>)}
     );
   function handleChange(type: string) {
     setFormData((fd) => ({ ...fd, type }));
@@ -136,6 +156,19 @@ export default function AddEdit() {
           });
           break;
         case "hash":
+          // const item = formData.hashValue;
+          // Promise.all(UpdateHashItem(formData)).then((res) => {
+          //   if (res.code == 200) {
+          //     notification.success({
+          //       message: res.msg,
+          //     });
+          //     navigate("/details");
+          //   } else {
+          //     notification.error({
+          //       message: res.msg,
+          //     });
+          //   }
+          // });
           break;
 
         default:
@@ -159,11 +192,15 @@ export default function AddEdit() {
           });
           break;
         case "hash":
+          // [{field:"",value:""}]=>{}
+          const res = {};
+          formData.hashValue.forEach((item) => {
+            // @ts-ignore
+            res[item.field] = item.value;
+          });
           const props = {
             ...formData,
-            value: {
-              ...formData.hashValue,
-            },
+            value: res,
           };
           AddHash(props).then((res) => {
             if (res.code == 200) {
@@ -183,6 +220,33 @@ export default function AddEdit() {
           break;
       }
     }
+  }
+  function handDelField(index: number) {
+    const newHashValue = formData.hashValue.filter((item, i) => i != index);
+    setFormData((fd) => ({
+      ...fd,
+      hashValue: newHashValue,
+    }));
+  }
+  function handAddField() {
+    const newHashValue = [...formData.hashValue];
+    newHashValue.push({ field: "", value: "" });
+    setFormData((fd) => ({
+      ...fd,
+      hashValue: newHashValue,
+    }));
+  }
+
+  function handFixField(e: any, index: number, type: "field" | "value") {
+    const val = e.target.value;
+    const fixObj = { ...formData.hashValue[index] };
+    fixObj[type] = val;
+    setFormData((fd) => ({
+      ...fd,
+      hashValue: formData.hashValue.map((item, i) =>
+        i != index ? item : fixObj
+      ),
+    }));
   }
 
   return (
@@ -218,6 +282,7 @@ export default function AddEdit() {
               <Col span={10}>
                 <div className="mb-[8px]">Key Type*</div>
                 <Select
+                  disabled={type != "add"}
                   className="w-full"
                   value={formData.type}
                   onChange={handleChange}

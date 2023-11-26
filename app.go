@@ -121,6 +121,13 @@ func (a *App) DbInfo(identity string) define.M {
 
 // 数据查询
 func (a *App) SearchValues(search *define.SearchKey) define.M {
+	defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
+        fmt.Println("d")
+        if err:=recover();err!=nil{
+            fmt.Printf("err::::::::::%v",err) // 这里的err其实就是panic传入的内容，55
+        }
+        fmt.Printf("search::::::%v",*search)
+    }()
 	values, err := service.SearchValues(search)
 	if err != nil {
 		return define.M{
