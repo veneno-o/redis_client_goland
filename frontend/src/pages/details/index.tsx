@@ -57,6 +57,22 @@ export default function Details() {
       title: "key",
       dataIndex: "key",
       key: "key",
+      render(value, record, index) {
+        return (
+          <div
+            className={Style.connDb}
+            onClick={() => {
+              dispatch({
+                type: "set_detailInfo",
+                data: { detailInfo: record },
+              });
+              navigate("/crud?type=look");
+            }}
+          >
+            {value}
+          </div>
+        );
+      },
     },
     {
       title: "ttl",
@@ -270,17 +286,17 @@ export default function Details() {
                   columns={columns}
                   dataSource={tableData}
                   pagination={false}
-                  onRow={(record, index) => {
-                    return {
-                      onClick() {
-                        dispatch({
-                          type: "set_detailInfo",
-                          data: { detailInfo: record },
-                        });
-                        navigate("/crud?type=look");
-                      },
-                    };
-                  }}
+                  // onRow={(record, index) => {
+                  //   return {
+                  //     onClick() {
+                  //       dispatch({
+                  //         type: "set_detailInfo",
+                  //         data: { detailInfo: record },
+                  //       });
+                  //       navigate("/crud?type=look");
+                  //     },
+                  //   };
+                  // }}
                 />
               </ConfigProvider>
             </div>

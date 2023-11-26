@@ -18,6 +18,7 @@
 .connDb {
   cursor: pointer;
   color: #fff;
+  cursor: pointer;
 }
 .connDb:hover {
   text-decoration: underline;

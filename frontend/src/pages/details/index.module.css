@@ -48,3 +48,12 @@
   margin-right: 10px;
   line-height: 24px;
 }
+.connDb {
+  cursor: pointer;
+  color: #fff;
+  cursor: pointer;
+}
+.connDb:hover {
+  text-decoration: underline;
+  color: rgb(22, 104, 220);
+}
