@@ -1,19 +1,16 @@
-# README
+## 开发运行
 
-## About
+[**安装相关依赖**](https://wails.io/zh-Hans/docs/gettingstarted/installation)
 
-This is the official Wails React-TS template.
+- 版本要求 `Go 1.18+` & `NPM (Node 15+)`
+- Wails 要求安装 WebView2 运行时。 一些 Windows 安装已经安装了这个。 您可以使用 `wails doctor` 命令进行检查。
+- 运行 `go install github.com/wailsapp/wails/v2/cmd/wails@latest` 安装 Wails CLI。
 
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+## 打包
 
-## Live Development
+- 执行`wails build`命令， 打包后的可执行文件位于 ``/build/bin`
 
-To run in live development mode, run `wails dev` in the project directory. This will run a Vite development
-server that will provide very fast hot reload of your frontend changes. If you want to develop in a browser
-and have access to your Go methods, there is also a dev server that runs on http://localhost:34115. Connect
-to this in your browser, and you can call your Go code from devtools.
+## 版本
 
-## Building
-
-To build a redistributable, production mode package, use `wails build`.
+- `v1.0.0` 主要实现的功能有`数据库连接CRUD`，`CLI操作`，`string and hash CRUD`
+- 更新中...
