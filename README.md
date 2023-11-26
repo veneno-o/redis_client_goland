@@ -10,6 +10,10 @@
 
 - 执行`wails build`命令， 打包后的可执行文件位于 `/build/bin`
 
+## app 体验
+
+- `/build/bin/rc.exe`
+
 ## 更换 app 图标
 
 - 删除 `build/windows/icon.ico`
