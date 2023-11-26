@@ -2,9 +2,9 @@ package main
 
 import (
 	"changeme/internal/define"
+	"changeme/internal/helper"
 	"changeme/internal/service"
 	"context"
-	"fmt"
 )
 
 // App struct
@@ -25,6 +25,7 @@ func (a *App) startup(ctx context.Context) {
 
 // 建立连接
 func (a *App) ConnectDb(identity string) define.M {
+	defer helper.NoPanic()
 	err := service.DbConn(identity)
 	if err != nil {
 		return define.M{
@@ -43,6 +44,7 @@ func (a *App) ConnectCreate(conf define.Connection) define.M {
 	// conf := define.Connection{
 	// 	Addr: "127.0.0.1",
 	// }
+	defer helper.NoPanic()
 	err := service.ConnectionCreate(&conf)
 	if err != nil {
 		return define.M{Code: define.FailCode, Msg: err.Error()}
@@ -52,6 +54,7 @@ func (a *App) ConnectCreate(conf define.Connection) define.M {
 
 // 查找连接列表
 func (a *App) ConnectionList() define.M {
+	defer helper.NoPanic()
 	connList, err := service.ConnectionList()
 	if err != nil {
 		return define.M{Code: define.FailCode, Msg: err.Error()}
@@ -61,7 +64,7 @@ func (a *App) ConnectionList() define.M {
 
 // 编辑连接
 func (a *App) ConnectionEdit(conf *define.Connection) define.M {
-	fmt.Printf("编辑连接:%v", conf)
+	defer helper.NoPanic()
 	err := service.ConnectionEdit(conf)
 	if err != nil {
 		return define.M{Code: define.FailCode, Msg: err.Error()}
@@ -71,6 +74,7 @@ func (a *App) ConnectionEdit(conf *define.Connection) define.M {
 
 // 删除连接
 func (a *App) ConnectDel(identity string) define.M {
+	defer helper.NoPanic()
 	err := service.ConnectionDel(identity)
 	if err != nil {
 		return define.M{Code: define.FailCode, Msg: err.Error()}
@@ -80,6 +84,7 @@ func (a *App) ConnectDel(identity string) define.M {
 
 // 数据库列表
 func (a *App) DbList(identity string) define.M {
+	defer helper.NoPanic()
 	if identity == "" {
 		return define.M{
 			Code: define.FailCode,
@@ -96,6 +101,7 @@ func (a *App) DbList(identity string) define.M {
 
 // 数据库详情信息
 func (a *App) DbInfo(identity string) define.M {
+	defer helper.NoPanic()
 	if identity == "" {
 		return define.M{
 			Code: define.FailCode,
@@ -121,13 +127,7 @@ func (a *App) DbInfo(identity string) define.M {
 
 // 数据查询
 func (a *App) SearchValues(search *define.SearchKey) define.M {
-	defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
-        fmt.Println("d")
-        if err:=recover();err!=nil{
-            fmt.Printf("err::::::::::%v",err) // 这里的err其实就是panic传入的内容，55
-        }
-        fmt.Printf("search::::::%v",*search)
-    }()
+	defer helper.NoPanic()
 	values, err := service.SearchValues(search)
 	if err != nil {
 		return define.M{
@@ -144,6 +144,7 @@ func (a *App) SearchValues(search *define.SearchKey) define.M {
 
 // cli查询
 func (a *App) SearchCli(cli *define.Cli) define.M {
+	defer helper.NoPanic()
 	exeCli, err := service.ExeCli(cli)
 	if err != nil {
 		return define.M{
@@ -160,6 +161,7 @@ func (a *App) SearchCli(cli *define.Cli) define.M {
 
 // string添加
 func (a *App) AddString(req *define.AddUpdateString) define.M {
+	defer helper.NoPanic()
 	err := service.AddString(req)
 	if err != nil {
 		return define.M{
@@ -175,6 +177,7 @@ func (a *App) AddString(req *define.AddUpdateString) define.M {
 
 // string删除
 func (a *App) DelString(req *define.DelString) define.M {
+	defer helper.NoPanic()
 	err := service.DelString(req)
 	if err != nil {
 		return define.M{
@@ -190,6 +193,7 @@ func (a *App) DelString(req *define.DelString) define.M {
 
 // string更新
 func (a *App) UpdateString(req *define.AddUpdateString) define.M {
+	defer helper.NoPanic()
 	err := service.UpdateString(req)
 	if err != nil {
 		return define.M{
@@ -205,6 +209,7 @@ func (a *App) UpdateString(req *define.AddUpdateString) define.M {
 
 // hash添加
 func (a *App) AddHash(req *define.AddHash) define.M {
+	defer helper.NoPanic()
 	err := service.AddHash(req)
 	if err != nil {
 		return define.M{
@@ -220,6 +225,7 @@ func (a *App) AddHash(req *define.AddHash) define.M {
 
 // hash删除field
 func (a *App) DelHashItem(req *define.DelHashItem) define.M {
+	defer helper.NoPanic()
 	err := service.DelHashItem(req)
 	if err != nil {
 		return define.M{
@@ -235,6 +241,7 @@ func (a *App) DelHashItem(req *define.DelHashItem) define.M {
 
 // hash删除
 func (a *App) DelHash(req *define.DelHash) define.M {
+	defer helper.NoPanic()
 	err := service.DelHash(req)
 	if err != nil {
 		return define.M{
@@ -250,6 +257,7 @@ func (a *App) DelHash(req *define.DelHash) define.M {
 
 // hash更新 UpdateHashItem
 func (a *App) UpdateHashItem(req *define.UpdateHashItem) define.M {
+	defer helper.NoPanic()
 	err := service.UpdateHashItem(req)
 	if err != nil {
 		return define.M{

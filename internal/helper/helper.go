@@ -4,6 +4,7 @@ import (
 	"changeme/internal/define"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net"
 	"os"
 	"path"
@@ -66,4 +67,11 @@ func GetRedisClient(identity string, db int) (*redis.Client, error) {
 // 封装返回格式
 func GetResult(code int, msg string, value any) define.M {
 	return define.M{code, msg, value}
+}
+
+// 防止panic
+func NoPanic(){ // 必须要先声明defer，否则不能捕获到panic异常
+	if err:=recover();err!=nil{
+		fmt.Printf("err->::%v",err) // 这里的err其实就是panic传入的内容，55
+	}
 }
