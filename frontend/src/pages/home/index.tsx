@@ -1,6 +1,19 @@
-import { CheckOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Layout, Table, Tag, notification } from "antd";
-import Sider from "antd/es/layout/Sider";
+import {
+  CheckOutlined,
+  GithubOutlined,
+  WechatOutlined,
+} from "@ant-design/icons";
+import {
+  Button,
+  Form,
+  Input,
+  Layout,
+  Popover,
+  Table,
+  Tag,
+  notification,
+} from "antd";
+import { default as Sider } from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
@@ -12,6 +25,7 @@ import {
   ConnectionEdit,
   ConnectionList,
 } from "../../../wailsjs/go/main/App";
+import Wx from "../../assets/images/wx.jpg";
 import { useStore } from "../../hooks/store";
 import { ConnAreaState, ConnList, FieldType } from "../../types/index.d";
 import Style from "./index.module.css";
@@ -235,6 +249,26 @@ export default function Home() {
         }}
       >
         <div className={Style.logo}></div>
+        <div className="py-[30px] h-[140px] flex flex-col justify-between">
+          <Popover
+            placement="right"
+            content={
+              <img className="w-[200px] h-[200px] text-[32px]" src={Wx}></img>
+            }
+          >
+            <div className="flex justify-center">
+              <WechatOutlined className="text-[32px]" />
+            </div>
+          </Popover>
+          <Popover
+            placement="right"
+            content={<div>https://github.com/veneno-o</div>}
+          >
+            <div className="flex justify-center">
+              <GithubOutlined className="text-[32px]" />
+            </div>
+          </Popover>
+        </div>
       </Sider>
       <Content
         style={{

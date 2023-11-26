@@ -1,9 +1,14 @@
-import { SearchOutlined } from "@ant-design/icons";
+import {
+  GithubOutlined,
+  SearchOutlined,
+  WechatOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   ConfigProvider,
   Input,
   Layout,
+  Popover,
   Select,
   Table,
   Tag,
@@ -15,6 +20,7 @@ import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DelHash, DelString, SearchValues } from "../../../wailsjs/go/main/App";
+import Wx from "../../assets/images/wx.jpg";
 import { classNames, typeTagMap } from "../../helper/utils";
 import { useStore } from "../../hooks/store";
 import {
@@ -188,6 +194,26 @@ export default function Details() {
         }}
       >
         <div className={Style.logo}></div>
+        <div className="py-[30px] h-[140px] flex flex-col justify-between">
+          <Popover
+            placement="right"
+            content={
+              <img className="w-[200px] h-[200px] text-[32px]" src={Wx}></img>
+            }
+          >
+            <div className="flex justify-center">
+              <WechatOutlined className="text-[32px]" />
+            </div>
+          </Popover>
+          <Popover
+            placement="right"
+            content={<div>https://github.com/veneno-o</div>}
+          >
+            <div className="flex justify-center">
+              <GithubOutlined className="text-[32px]" />
+            </div>
+          </Popover>
+        </div>
       </Sider>
       <Layout>
         <Header

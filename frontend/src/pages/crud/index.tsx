@@ -1,10 +1,18 @@
-import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  GithubOutlined,
+  PlusCircleOutlined,
+  WechatOutlined,
+} from "@ant-design/icons";
+import Wx from "../../assets/images/wx.jpg";
+
 import {
   Button,
   Col,
   Divider,
   Input,
   Layout,
+  Popover,
   Row,
   Select,
   notification,
@@ -291,6 +299,26 @@ export default function AddEdit() {
         }}
       >
         <div className={Style.logo}></div>
+        <div className="py-[30px] h-[140px] flex flex-col justify-between">
+          <Popover
+            placement="right"
+            content={
+              <img className="w-[200px] h-[200px] text-[32px]" src={Wx}></img>
+            }
+          >
+            <div className="flex justify-center">
+              <WechatOutlined className="text-[32px]" />
+            </div>
+          </Popover>
+          <Popover
+            placement="right"
+            content={<div>https://github.com/veneno-o</div>}
+          >
+            <div className="flex justify-center">
+              <GithubOutlined className="text-[32px]" />
+            </div>
+          </Popover>
+        </div>
       </Sider>
       <Layout>
         <Header

@@ -17,3 +17,8 @@ body {
   text-align: left !important;
   margin-left: 40px !important;
 }
+.ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
